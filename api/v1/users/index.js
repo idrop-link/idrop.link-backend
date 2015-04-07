@@ -45,10 +45,54 @@
     });
 
     /**
-     * Lookup User
+     * @api {get} /users/:id Lookup User
+     *
+     * @apiName GetUser
+     * @apiGroup User
+     *
+     * @apiSuccess (200) {String} _id id of the user
+     * @apiSuccess (200) {String} email of the user
+     * @apiSuccess (200) {String} creation_date when the user was created
+     *
+     * @apiError (500) {String} message something went wrong
+     * @apiError (404) {String} message no such user
+     * @apiError (401) {String} message unauthorized
      */
     app.get('/api/v1/users/:userId', function(req, res) {
-        // TODO
+        // validate token
+        var incomingToken = User.decodeJwt(req.headers.token);
+
+        if (incomingToken && incomingToken.email) {
+            User.findOne({
+                _id: req.params.userId
+            }, function(err, doc) {
+                if (err) {
+                    res.status = 500;
+                    res.json({
+                        message: err
+                    });
+                }
+
+                if (!doc) {
+                    res.status = 404;
+                    res.json({
+                        message: "no such user"
+                    });
+                }
+
+                res.status = 200;
+                res.json({
+                    _id: doc._id,
+                    email: doc.email,
+                    creation_date: doc.creation_date
+                });
+            });
+        } else {
+            res.status = 401;
+            res.json({
+                message: 'unauthorized'
+            });
+        }
     });
 
     /**
