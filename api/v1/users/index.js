@@ -19,11 +19,6 @@
      * @apiParam {String} password the users password
      */
     app.post('/api/v1/users/', function(req, res) {
-        var user = new User({
-            email: email,
-            password: password
-        });
-
         User.register(new User({
             email: req.body.email
         }), req.body.password, function(err, doc) {
