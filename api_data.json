@@ -126,15 +126,23 @@
           {
             "group": "401",
             "optional": false,
-            "field": "error",
+            "field": "message",
             "description": "<p>unauthorized</p> "
+          }
+        ],
+        "404": [
+          {
+            "group": "404",
+            "optional": false,
+            "field": "message",
+            "description": "<p>no such user</p> "
           }
         ],
         "500": [
           {
             "group": "500",
             "optional": false,
-            "field": "error",
+            "field": "message",
             "description": "<p>error while generating token</p> "
           }
         ]
