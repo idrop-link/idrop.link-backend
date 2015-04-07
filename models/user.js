@@ -9,6 +9,8 @@
     var mongoose = require('mongoose'),
         Schema = mongoose.Schema;
 
+    var TokenSchema = require('./token').TokenSchema;
+
     var UserSchema = new Schema({
         creation_date: {
             type: Date,
@@ -24,6 +26,7 @@
             required: true
         },
         registrationDate: Date,
+        tokens: [TokenSchema]
     });
 
     // hashing and salting the password before saving
@@ -49,7 +52,12 @@
         });
     });
 
-    // add a method to the model to verify the password
+    /**
+     * Verify password of the user
+     *
+     * @param password {String}     password of the user
+     * @param callback {Function}   to call when finished
+     */
     UserSchema.methods.verifyPassword = function(password, callback) {
         bcrypt.compare(password, this.password, function(err, matches) {
             if (err)
@@ -59,6 +67,15 @@
             // the passwords are matching
             callback(null, matches);
         });
+    };
+
+    /**
+     * Invalidate all tokens of the user to guarantee uniqueness of a token.
+     */
+    UserSchema.methods.invalidateTokens = function() {
+        for (var i = 0; i < this.tokens.length; i++) {
+            this.tokens[i].invalidate();
+        }
     };
 
     var User = mongoose.model('User', UserSchema);
