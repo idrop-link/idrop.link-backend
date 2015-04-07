@@ -92,28 +92,14 @@
         }
     };
 
-    UserSchema.statics.createToken = function(email, callback) {
-        var schema = this;
+    UserSchema.methods.createToken = function() {
+        var token = this.encodeJwt(this.email);
 
-        User.findOne({
-            email: email
-        }, function(err, doc) {
-            if (err)
-                return callback(err);
-
-            var token = schema.encode(email);
-
-            doc.token = new Token({
-                token: token
-            });
-
-            doc.save(function(err, doc) {
-                if (err)
-                    return callback(err);
-
-                callback(null, doc.token);
-            });
+        this.token = new Token({
+            token: token
         });
+
+        return token;
     };
 
     var User = mongoose.model('User', UserSchema);
