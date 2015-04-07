@@ -7,7 +7,7 @@
     var passport = require('passport'),
         User = require('models/user');
 
-    var api = require('./api'),
+    var api = require('./api');
 
     /* set up CORS header */
     app.use(function(req, res, next) {

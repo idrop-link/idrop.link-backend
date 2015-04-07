@@ -111,7 +111,7 @@
 
                 callback(null, doc.token);
             });
-        })
+        });
     };
 
     var User = mongoose.model('User', UserSchema);

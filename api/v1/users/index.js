@@ -82,7 +82,7 @@
                     res.status = 200;
                     res.json({token: token});
                 }
-            })
+            });
         } else {
             res.status = 401;
             res.json({error: "unauthorized"});
