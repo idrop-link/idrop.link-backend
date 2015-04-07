@@ -111,7 +111,7 @@
      * @apiGroup User
      *
      * @apiError (500) message error while generating token
-     * @apiErorr (404) message no such user
+     * @apiError (404) message no such user
      * @apiError (401) message unauthorized
      *
      * @apiSuccess (200) token the requested token
