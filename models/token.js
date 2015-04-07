@@ -1,7 +1,7 @@
 (function() {
     'use strict';
 
-    var mongoose = require('mongoos'),
+    var mongoose = require('mongoose'),
         Schema = mongoose.Schema;
 
     var TokenSchema = new Schema({

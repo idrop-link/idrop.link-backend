@@ -9,7 +9,8 @@
     var mongoose = require('mongoose'),
         Schema = mongoose.Schema,
         passportLocalMongoose = require('passport-local-mongoose'),
-        jwt = require('jwt-simple');
+        jwt = require('jwt-simple'),
+        path = require('path');
 
     var tokenSecret = require(path.join(__dirname, '../', '/config/secrets')).tokenSecret;
 
@@ -28,7 +29,7 @@
         tokens: [TokenSchema]
     });
 
-    User.plugin(passportLocalMongoose, {
+    UserSchema.plugin(passportLocalMongoose, {
         usernameField: 'email',
         usernameUnique: true
     });

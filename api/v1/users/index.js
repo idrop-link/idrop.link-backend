@@ -2,7 +2,8 @@
     'use strict';
 
     var express = require('express'),
-        app = module.exports = express();
+        app = module.exports = express(),
+        passport = require('passport');
 
     // User
     /**
