@@ -4,7 +4,10 @@
 
     var app = exports.app = express();
 
-    /* set up middleware */
+    var passport = require('passport'),
+        LocalStrategy = require('passport-local').Strategy,
+        User = require('models/user');
+
     var api = require('./api'),
 
     /* set up CORS header */
@@ -13,6 +16,24 @@
         res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
         next();
     });
+
+    /* set up authentification */
+    passport.use(new LocalStrategy(function(email, password, done)
+        User.findOne({
+            email: email
+        }, function(err, doc) {
+            if (err)
+                return done(err);
+
+            if (!user) {
+                return done(null, false, {
+                    message: 'No such User.'
+                });
+            }
+
+            return done(null, doc);
+        });
+    ));
 
     app.use(api);
 
