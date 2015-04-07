@@ -13,7 +13,7 @@
      *
      * @apiSuccess (200) {String} success contains the success description
      *
-     * @apiError (400) {String} error contains the error description
+     * @apiError (400) {String} message contains the error description
      *
      * @apiParam {String} email unique email address
      * @apiParam {String} password the users password
@@ -24,10 +24,15 @@
         }), req.body.password, function(err, doc) {
             if (err) {
                 res.status = 400;
-                res.json({error: err});
+                res.json({
+                    message: err
+                });
             } else {
                 res.status = 200;
-                res.json({success: "registered user"});
+                res.json({
+                    message: "registered user",
+                    _id: doc._id
+                });
             }
         });
     });
