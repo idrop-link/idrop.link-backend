@@ -25,7 +25,6 @@
             type: String,
             required: true
         },
-        registrationDate: Date,
         tokens: [TokenSchema]
     });
 
