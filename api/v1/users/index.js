@@ -60,10 +60,33 @@
 
     // Tokens
     /**
-     * Authenticate User
+     * @api {post} /users/:id/authenticate Create Token for a User
+     *
+     * @apiName CreateUserToken
+     * @apiGroup User
+     *
+     * @apiError (500) error error while generating token
+     * @apiError (401) error unauthorized
+     *
+     * @apiSuccess (200) token the requested token
+     *
+     * @apiParam {String} email for the user
      */
-    app.post('/api/v1/users/:userId/authenticate', function(req, res) {
-        // TODO
+    app.post('/api/v1/users/:userId/authenticate', passport.authenticate('local', {session: false}), function(req, res) {
+        if (req.user) {
+            User.createToken(req.user.email, function(err, token) {
+                if (err) {
+                    res.status = 500;
+                    res.json({error: err});
+                } else {
+                    res.status = 200;
+                    res.json({token: token});
+                }
+            })
+        } else {
+            res.status = 401;
+            res.json({error: "unauthorized"});
+        }
     });
 
     // Drops
