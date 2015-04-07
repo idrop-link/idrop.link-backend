@@ -19,8 +19,8 @@
      *              "self":{
      *                  "href":"/api/v1"
      *              },
-     *              "lakes":{
-     *                  "href":"/api/v1/lakes"
+     *              "users":{
+     *                  "href":"/api/v1/users"
      *               }
      *          }
      *      }

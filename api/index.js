@@ -10,18 +10,18 @@
      * @apiName GetRoot
      * @apiGroup API
      *
-     * @apiSuccess (200) 200 OK
+     * @apiSuccess (200) {String} _links available links from the endpoint
      *
      * @apiSuccessExample {json} Success-Response:
      *       HTTP/1.1 OK
      *       {
-     *            "_links": {
-     *                  "self": {
-     *                    "href": "/api"
-     *                }
-     *            },
-     *            "v1": {
-     *                "href": "/api/v1"
+     *           "_links": {
+     *               "self": {
+     *                   "href": "/api"
+     *               },
+     *               "v1": {
+     *                   "href": "/api/v1"
+     *               }
      *           }
      *       }
      */
