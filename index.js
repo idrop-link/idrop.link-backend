@@ -5,7 +5,6 @@
     var app = exports.app = express();
 
     var passport = require('passport'),
-        LocalStrategy = require('passport-local').Strategy,
         User = require('models/user');
 
     var api = require('./api'),
@@ -17,23 +16,8 @@
         next();
     });
 
-    /* set up authentification */
-    passport.use(new LocalStrategy(function(email, password, done)
-        User.findOne({
-            email: email
-        }, function(err, doc) {
-            if (err)
-                return done(err);
-
-            if (!user) {
-                return done(null, false, {
-                    message: 'No such User.'
-                });
-            }
-
-            return done(null, doc);
-        });
-    ));
+    /* set up passport strategy */
+    passport.use(User.createStrategy());
 
     app.use(api);
 

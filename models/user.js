@@ -7,7 +7,8 @@
     'use strict';
 
     var mongoose = require('mongoose'),
-        Schema = mongoose.Schema;
+        Schema = mongoose.Schema,
+        passportLocalMongoose = require('passport-local-mongoose');
 
     var TokenSchema = require('./token').TokenSchema;
 
@@ -27,6 +28,11 @@
         },
         registrationDate: Date,
         tokens: [TokenSchema]
+    });
+
+    User.plugin(passportLocalMongoose, {
+        usernameField: 'email',
+        usernameUnique: true
     });
 
     // hashing and salting the password before saving
