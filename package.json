@@ -1,0 +1,40 @@
+{
+  "name": "idrop.link-backend",
+  "version": "0.0.0",
+  "description": " API for the idrop.link project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/andinfinity/idrop.link-backend.git"
+  },
+  "keywords": [
+    "cloud",
+    "drop"
+  ],
+  "author": "Christian Schulze",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/andinfinity/idrop.link-backend/issues"
+  },
+  "homepage": "https://github.com/andinfinity/idrop.link-backend",
+  "dependencies": {
+    "express": "^4.12.3",
+    "jsonwebtoken": "^4.2.2",
+    "mongoose": "^4.0.1",
+    "passport-jwt": "^1.0.0"
+  },
+  "devDependencies": {
+    "chai": "^2.2.0",
+    "grunt": "^0.4.5",
+    "grunt-contrib-jshint": "^0.11.1",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-jsbeautifier": "^0.2.10",
+    "mocha": "^2.2.1",
+    "mocha-jshint": "^1.0.0",
+    "mocha-steps": "0.0.1",
+    "supertest": "^0.15.0"
+  }
+}
