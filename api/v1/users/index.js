@@ -39,7 +39,7 @@
     /**
      * Authenticate User
      */
-    app.post('/api/v1/users/userId/authenticate', function(req, res) {
+    app.post('/api/v1/users/:userId/authenticate', function(req, res) {
         // TODO
     });
 
