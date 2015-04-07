@@ -110,8 +110,9 @@
      * @apiName CreateUserToken
      * @apiGroup User
      *
-     * @apiError (500) error error while generating token
-     * @apiError (401) error unauthorized
+     * @apiError (500) message error while generating token
+     * @apiErorr (404) message no such user
+     * @apiError (401) message unauthorized
      *
      * @apiSuccess (200) token the requested token
      *
@@ -121,23 +122,42 @@
         session: false
     }), function(req, res) {
         if (req.user) {
-            User.createToken(req.user.email, function(err, token) {
+            User.findOne(req.user.email, function(err, doc) {
                 if (err) {
                     res.status = 500;
                     res.json({
-                        error: err
+                        message: err
                     });
-                } else {
+                }
+
+                if (!doc) {
+                    res.status = 404;
+                    res.json({
+                        message: "no such user"
+                    });
+                }
+
+                doc.invalidateTokens();
+                var token = doc.createToken();
+
+                doc.save(function(err, doc) {
+                    if (err) {
+                        res.status = 500;
+                        res.json({
+                            message: err
+                        });
+                    }
+
                     res.status = 200;
                     res.json({
                         token: token
                     });
-                }
+                });
             });
         } else {
             res.status = 401;
             res.json({
-                error: "unauthorized"
+                message: "unauthorized"
             });
         }
     });
