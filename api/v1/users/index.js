@@ -29,7 +29,7 @@
         }), req.body.password, function(err, doc) {
             if (err) {
                 res.status = 400;
-                res.json({error: "bad request"});
+                res.json({error: err});
             } else {
                 res.status = 200;
                 res.json({success: "registered user"});
