@@ -8,19 +8,18 @@
 
     var mongoose = require('mongoose'),
         Schema = mongoose.Schema,
-        passportLocalMongoose = require('passport-local-mongoose');
+        passportLocalMongoose = require('passport-local-mongoose'),
+        jwt = require('jwt-simple');
 
-    var TokenSchema = require('./token').TokenSchema;
+    var tokenSecret = require('../../config/secrets').tokenSecret;
+
+    var TokenSchema = require('./token').TokenSchema,
+        Token = require('./token').Token;
 
     var UserSchema = new Schema({
         creation_date: {
             type: Date,
             default: Date.now
-        },
-        email: {
-            type: String,
-            unique: true,
-            required: true
         },
         password: {
             type: String,
@@ -58,6 +57,15 @@
         });
     });
 
+    /* JTW static methods */
+    UserSchema.statics.encodeJwt = function(data) {
+        return jtw.encode(data, tokenSecret);
+    };
+
+    UserSchema.statics.encodeJwt = function(data) {
+        return jwt.decode(data, tokenSecret);
+    };
+
     /**
      * Verify password of the user
      *
@@ -82,6 +90,28 @@
         for (var i = 0; i < this.tokens.length; i++) {
             this.tokens[i].invalidate();
         }
+    };
+
+    UserSchema.statics.createToken = function(email, callback) {
+        var schema = this;
+
+        User.findOne({email: email}, function(err, doc) {
+            if (err)
+                return callback(err);
+
+            var token = schema.encode(email);
+
+            doc.token = new Token({
+                token: token
+            });
+
+            doc.save(function(err, doc) {
+                if (err)
+                    return callback(err);
+
+                callback(null, doc.token);
+            });
+        })
     };
 
     var User = mongoose.model('User', UserSchema);
