@@ -10,6 +10,10 @@
         Schema = mongoose.Schema;
 
     var UserSchema = new Schema({
+        creation_date: {
+            type: Date,
+            default: Date.now
+        },
         email: {
             type: String,
             unique: true,
