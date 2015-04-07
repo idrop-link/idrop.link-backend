@@ -95,7 +95,9 @@
     UserSchema.statics.createToken = function(email, callback) {
         var schema = this;
 
-        User.findOne({email: email}, function(err, doc) {
+        User.findOne({
+            email: email
+        }, function(err, doc) {
             if (err)
                 return callback(err);
 

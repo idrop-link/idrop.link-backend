@@ -117,20 +117,28 @@
      *
      * @apiParam {String} email for the user
      */
-    app.post('/api/v1/users/:userId/authenticate', passport.authenticate('local', {session: false}), function(req, res) {
+    app.post('/api/v1/users/:userId/authenticate', passport.authenticate('local', {
+        session: false
+    }), function(req, res) {
         if (req.user) {
             User.createToken(req.user.email, function(err, token) {
                 if (err) {
                     res.status = 500;
-                    res.json({error: err});
+                    res.json({
+                        error: err
+                    });
                 } else {
                     res.status = 200;
-                    res.json({token: token});
+                    res.json({
+                        token: token
+                    });
                 }
             });
         } else {
             res.status = 401;
-            res.json({error: "unauthorized"});
+            res.json({
+                error: "unauthorized"
+            });
         }
     });
 
