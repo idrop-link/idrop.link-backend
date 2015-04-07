@@ -37,7 +37,7 @@
      */
     TokenSchema.methods.invalidate = function() {
         this.invalidation_date = Date().getTime();
-    }
+    };
 
     var Token = mongoose.model('Token', TokenSchema);
     module.exports.Token = Token;
