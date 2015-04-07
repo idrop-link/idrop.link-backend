@@ -25,7 +25,7 @@
     "express": "^4.12.3",
     "jsonwebtoken": "^4.2.2",
     "mongoose": "^4.0.1",
-    "passport-jwt": "^1.0.0"
+    "passport-local": "^1.0.0"
   },
   "devDependencies": {
     "chai": "^2.2.0",
