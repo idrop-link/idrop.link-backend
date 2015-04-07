@@ -84,7 +84,7 @@ define({ "api": [
             "group": "400",
             "type": "String",
             "optional": false,
-            "field": "error",
+            "field": "message",
             "description": "<p>contains the error description</p> "
           }
         ]
@@ -161,6 +161,74 @@ define({ "api": [
             "optional": false,
             "field": "email",
             "description": "<p>for the user</p> "
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "api/v1/users/index.js",
+    "groupTitle": "User"
+  },
+  {
+    "type": "get",
+    "url": "/users/:id",
+    "title": "Lookup User",
+    "name": "GetUser",
+    "group": "User",
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "_id",
+            "description": "<p>id of the user</p> "
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "email",
+            "description": "<p>of the user</p> "
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "creation_date",
+            "description": "<p>when the user was created</p> "
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "401": [
+          {
+            "group": "401",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>unauthorized</p> "
+          }
+        ],
+        "404": [
+          {
+            "group": "404",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>no such user</p> "
+          }
+        ],
+        "500": [
+          {
+            "group": "500",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>something went wrong</p> "
           }
         ]
       }
