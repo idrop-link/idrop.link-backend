@@ -5,7 +5,7 @@
     var app = exports.app = express();
 
     var passport = require('passport'),
-        User = require('models/user');
+        User = require('./models/user');
 
     var api = require('./api');
 

@@ -11,7 +11,7 @@
         passportLocalMongoose = require('passport-local-mongoose'),
         jwt = require('jwt-simple');
 
-    var tokenSecret = require('../../config/secrets').tokenSecret;
+    var tokenSecret = require(path.join(__dirname, '../', '/config/secrets')).tokenSecret;
 
     var TokenSchema = require('./token').TokenSchema,
         Token = require('./token').Token;
