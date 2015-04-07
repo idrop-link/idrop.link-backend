@@ -2,16 +2,39 @@
     'use strict';
 
     var express = require('express'),
-        app = module.exports = express(),
-        tokens = require('./tokens'),
-        drops = require('./drops');
+        app = module.exports = express();
 
     // User
     /**
-     * Create User
+     * @api {post} /users Create User
+     *
+     * @apiName CreateUser
+     * @apiGroup User
+     *
+     * @apiSuccess (200) {String} success contains the success description
+     *
+     * @apiError (400) {String} error contains the error description
+     *
+     * @apiParam {String} email unique email address
+     * @apiParam {String} password the users password
      */
     app.post('/api/v1/users/', function(req, res) {
-        // TODO
+        var user = new User({
+            email: email,
+            password: password
+        });
+
+        User.register(new User({
+            email: req.body.email
+        }), req.body.password, function(err, doc) {
+            if (err) {
+                res.status = 400;
+                res.json({error: "bad request"});
+            } else {
+                res.status = 200;
+                res.json({success: "registered user"});
+            }
+        });
     });
 
     /**
