@@ -10,7 +10,8 @@
         Schema = mongoose.Schema,
         passportLocalMongoose = require('passport-local-mongoose'),
         jwt = require('jwt-simple'),
-        path = require('path');
+        path = require('path'),
+        bcrypt= require('bcrypt');
 
     var tokenSecret = require(path.join(__dirname, '../', '/config/secrets')).tokenSecret;
 
