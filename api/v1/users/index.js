@@ -12,7 +12,7 @@
      * @apiName CreateUser
      * @apiGroup User
      *
-     * @apiSuccess (200) {String} success contains the success description
+     * @apiSuccess (201) {String} success contains the success description
      *
      * @apiError (400) {String} message contains the error description
      *
@@ -29,7 +29,7 @@
                     message: err
                 });
             } else {
-                res.status = 200;
+                res.status = 201;
                 res.json({
                     message: 'registered user',
                     _id: doc._id
