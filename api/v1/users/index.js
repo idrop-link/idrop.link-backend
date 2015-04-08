@@ -27,7 +27,7 @@
             res
                 .status(400)
                 .json({
-                    message: "bad request"
+                    message: 'missing parameters'
                 });
         }
 
@@ -80,9 +80,7 @@
                 if (err) {
                     res
                         .status(500)
-                        .json({
-                            message: err
-                        });
+                        .json(err);
                 }
 
                 if (!doc) {
@@ -142,10 +140,8 @@
             User.findById(req.body.userId, function(err, doc) {
                 if (err) {
                     res
-                        .status(400)
-                        .json({
-                            message: err
-                        });
+                        .status(500)
+                        .json(err);
                 }
 
                 if (!doc) {
@@ -166,9 +162,7 @@
                             if (err) {
                                 res
                                     .status(500)
-                                    .json({
-                                        message: err
-                                    });
+                                    .json(err);
                             } else {
                                 res
                                     .status(200)
