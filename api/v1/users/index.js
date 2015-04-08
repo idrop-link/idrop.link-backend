@@ -102,10 +102,68 @@
     });
 
     /**
-     * Delete User
+     * @api {delete} /users/:id Delete User
+     *
+     * @apiName DeleteUser
+     * @apiGroup User
+     *
+     * @apiError (500) message error while removing user
+     * @apiError (404) message user with id not found
+     * @apiError (401) message unauthorized
+     * @apiError (400) message id and email do not match
+     *
+     * @apiSuccess (200) message removed user
+     *
      */
-    app.delete('/api/v1/users/:userId', function(req, res) {
-        // TODO
+    app.delete('/api/v1/users/:userId', passport.authenticate('local', {
+        session: false
+    }), function(req, res) {
+        // validate token
+        var incomingToken = User.decodeJwt(req.headers.token);
+
+        if (incomingToken && incomingToken.email) {
+            User.findById(req.body.userId, function(err, doc) {
+                if (err) {
+                    res.status = 400;
+                    res.json({
+                        message: err
+                    });
+                }
+
+                if (!doc) {
+                    res.status = 404;
+                    res.json({
+                        message: err
+                    });
+                } else {
+                    if (doc.email != incomingToken.email) {
+                        res.status = 401;
+                        res.json({
+                            message: 'unauthorized'
+                        });
+                    } else {
+                        doc.remove(function(err, doc) {
+                            if (err) {
+                                res.status = 500;
+                                res.json({
+                                    message: err
+                                });
+                            } else {
+                                res.status = 200;
+                                res.json({
+                                    message: 'removed user'
+                                });
+                            }
+                        });
+                    }
+                }
+            });
+        } else {
+            res.status = 401;
+            res.json({
+                message: 'unauthorized'
+            });
+        }
     });
 
     // Tokens
