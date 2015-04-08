@@ -6,7 +6,7 @@ Before touching anything, run `npm install --development` in the root directory 
 For everything you add, please provide tests. (See `Makefile` and `./test`) If you have problems check if your mongodb copy runs under the default host, otherwise provide it like this:
 ```
 env $MONGODB_URI='localhost:27017/idroplink' make test
-``
+```
 
 The API documentation is available [here](http://andinfinity.github.io/idrop.link-backend/).
 
