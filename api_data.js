@@ -122,6 +122,14 @@ define({ "api": [
     "group": "User",
     "error": {
       "fields": {
+        "400": [
+          {
+            "group": "400",
+            "optional": false,
+            "field": "message",
+            "description": "<p>bad request</p> "
+          }
+        ],
         "401": [
           {
             "group": "401",
@@ -270,6 +278,15 @@ define({ "api": [
     },
     "error": {
       "fields": {
+        "400": [
+          {
+            "group": "400",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>bad request (missing token probably)</p> "
+          }
+        ],
         "401": [
           {
             "group": "401",
