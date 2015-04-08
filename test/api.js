@@ -94,8 +94,9 @@
     describe('POST /users/:id/authenticate', function() {
         it('should not find user', function(done) {
             request(app)
-                .post('/api/v1/users/foobar/authenticate')
+                .post('/api/v1/users/000000000000000000000000/authenticate')
                 .expect(404)
+                .send(testUser)
                 .end(function(err, res) {
                     if (err) done(err);
                     else done();
