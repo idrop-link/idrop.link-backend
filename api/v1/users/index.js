@@ -139,9 +139,7 @@
      * @apiSuccess (200) message removed user
      *
      */
-    app.delete('/api/v1/users/:userId', passport.authenticate('local', {
-        session: false
-    }), function(req, res) {
+    app.delete('/api/v1/users/:userId', function(req, res) {
         // validate token
         var incomingToken = User.decodeJwt(req.headers.authorization);
 
