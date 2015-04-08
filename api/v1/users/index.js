@@ -70,8 +70,17 @@
      * @apiError (500) {String} message something went wrong
      * @apiError (404) {String} message no such user
      * @apiError (401) {String} message unauthorized
+	 * @apiError (400) {String} message bad request (missing token probably)
      */
     app.get('/api/v1/users/:userId', function(req, res) {
+		if (!req.headers.authorization) {
+			return res
+				.status(401)
+				.json({
+					message: 'token missing'
+				});
+		}
+
         // validate token
         var incomingToken = User.decodeJwt(req.headers.authorization);
 
@@ -109,9 +118,9 @@
             });
         } else {
             return res
-                .status(401)
+                .status(400)
                 .json({
-                    message: 'unauthorized'
+                    message: 'bad request'
                 });
         }
     });
