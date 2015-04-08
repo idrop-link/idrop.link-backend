@@ -25,7 +25,7 @@
                 .send({})
                 .end(function(err, res) {
                     if (err) done(err);
-                    done(err);
+                    else done(err);
                 });
         });
 
@@ -38,7 +38,7 @@
                 })
                 .end(function(err, res) {
                     if (err) done(err);
-                    done(err);
+                    else done(err);
                 });
         });
 
@@ -51,7 +51,7 @@
                 })
                 .end(function(err, res) {
                     if (err) done(err);
-                    done(err);
+                    else done(err);
                 });
         });
 
@@ -99,7 +99,7 @@
                 .send(testUser)
                 .end(function(err, res) {
                     if (err) done(err);
-                    done();
+                    else done();
                 });
         });
 
