@@ -18,6 +18,43 @@
     var userId = null;
 
     describe('Create User: POST /users', function() {
+        it('should not create a user', function(done) {
+            request(app)
+                .post('/api/v1/users')
+                .expect(400)
+                .send({})
+                .end(function(err, res) {
+                    if (err) done(err);
+                    done(err);
+                });
+        });
+
+        it('should not create a user', function(done) {
+            request(app)
+                .post('/api/v1/users')
+                .expect(400)
+                .send({
+                    email: testUser.email
+                })
+                .end(function(err, res) {
+                    if (err) done(err);
+                    done(err);
+                });
+        });
+
+        it('should not create a user', function(done) {
+            request(app)
+                .post('/api/v1/users')
+                .expect(400)
+                .send({
+                    password: testUser.password
+                })
+                .end(function(err, res) {
+                    if (err) done(err);
+                    done(err);
+                });
+        });
+
         it('should create a user', function(done) {
             request(app)
                 .post('/api/v1/users')
@@ -25,8 +62,16 @@
                 .send(testUser)
                 .end(function(err, res) {
                     if (err) done(err);
-                    else done();
+                    else {
+                        userId = res.body._id;
+                        done();
+                    }
                 });
+        });
+
+        it('should have returned an _id', function() {
+            expect(userId).to.be.a('string');
+            expect(userId).to.have.length(24);
         });
 
         it('should have an existing user with this email', function(done) {
