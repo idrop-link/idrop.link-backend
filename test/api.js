@@ -14,6 +14,9 @@
 
     var app = require('../').app;
 
+    var token = null;
+    var userId = null;
+
     describe('Create User: POST /users', function() {
         it('should create a user', function(done) {
             request(app)
