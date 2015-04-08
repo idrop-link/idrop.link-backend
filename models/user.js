@@ -58,12 +58,12 @@
         });
     });
 
-    /* JTW static methods */
+    /* JWT static methods */
     UserSchema.statics.encodeJwt = function(data) {
-        return jtw.encode(data, tokenSecret);
+        return jwt.encode(data, tokenSecret);
     };
 
-    UserSchema.statics.encodeJwt = function(data) {
+    UserSchema.statics.decodeJwt = function(data) {
         return jwt.decode(data, tokenSecret);
     };
 
