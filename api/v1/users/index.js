@@ -5,6 +5,8 @@
         app = module.exports = express(),
         passport = require('passport');
 
+    var User = 
+
     // User
     /**
      * @api {post} /users Create User
@@ -19,7 +21,17 @@
      * @apiParam {String} email unique email address
      * @apiParam {String} password the users password
      */
-    app.post('/api/v1/users/', function(req, res) {
+    app.post('/api/v1/users/', function(req, res, next) {
+        console.log(req.body);
+        if (req.body.email === undefined && req.body.password === undefined) {
+            res.status = 400;
+            res.json({
+                message: "bad request"
+            });
+
+            next();
+        }
+
         User.register(new User({
             email: req.body.email
         }), req.body.password, function(err, doc) {
