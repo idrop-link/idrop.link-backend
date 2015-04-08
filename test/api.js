@@ -182,5 +182,16 @@
                     else done();
                 });
         });
+
+        it('should delete user', function(done) {
+            request(app)
+                .delete('/api/v1/users/' + userId)
+                .expect(200)
+                .set('Authorization', token)
+                .end(function(err, res) {
+                    if (err) done(err);
+                    else done();
+                });
+        });
     });
 })();
