@@ -99,7 +99,7 @@
                 .send(testUser)
                 .end(function(err, res) {
                     if (err) done(err);
-                    else done();
+                    done();
                 });
         });
 
@@ -109,7 +109,7 @@
                 .expect(400)
                 .end(function(err, res) {
                     if (err) done(err);
-                    else done();
+                    done();
                 });
         });
 
@@ -140,7 +140,7 @@
                 .expect(400)
                 .end(function(err, res) {
                     if (err) done(err);
-                    else done();
+                    done();
                 });
         });
     });
