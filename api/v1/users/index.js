@@ -203,7 +203,7 @@
         session: false
     }), function(req, res) {
         if (req.user) {
-            User.findOne(req.user.email, function(err, doc) {
+            User.findById(req.params.userId, function(err, doc) {
                 if (err) {
                     res
                         .status(500)
@@ -216,7 +216,15 @@
                     res
                         .status(404)
                         .json({
-                            message: "no such user"
+                            message: 'no such user'
+                        });
+                }
+
+                if (doc.email != req.body.email) {
+                    res
+                        .status(401)
+                        .json({
+                            message: 'unauthorized'
                         });
                 }
 
