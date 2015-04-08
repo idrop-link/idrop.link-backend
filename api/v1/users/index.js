@@ -32,7 +32,8 @@
         }
 
         User.register(new User({
-            email: req.body.email
+            email: req.body.email,
+            password: req.body.password
         }), req.body.password, function(err, doc) {
             if (err) {
                 res
