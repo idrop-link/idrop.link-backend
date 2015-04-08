@@ -133,4 +133,15 @@
                 });
         });
     });
+    describe('DELETE /users/:id', function() {
+        it('should not delete user', function(done) {
+            request(app)
+                .delete('/api/v1/users/' + userId)
+                .expect(400)
+                .end(function(err, res) {
+                    if (err) done(err);
+                    else done();
+                });
+        });
+    });
 })();
