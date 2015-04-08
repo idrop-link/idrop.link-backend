@@ -8,6 +8,8 @@ For everything you add, please provide tests. (See `Makefile` and `./test`) If y
 env $MONGODB_URI='localhost:27017/idroplink' make test
 ``
 
+The API documentation is available [here](http://andinfinity.github.io/idrop.link-backend/).
+
 ### Running the app
 When everything is set up, run the app like this (you don't have to specify `$MONGODB_URI` if it runs at the standard host):
 
