@@ -90,4 +90,46 @@
                 });
         });
     });
+
+    describe('POST /users/:id/authenticate', function() {
+        it('should not find user', function(done) {
+            request(app)
+                .post('/api/v1/users/foobar/authenticate')
+                .expect(404)
+                .end(function(err, res) {
+                    if (err) done(err);
+                    else done();
+                });
+        });
+
+        it('should return BadRequest', function(done) {
+            request(app)
+                .post('/api/v1/users/' + userId + '/authenticate')
+                .expect(400)
+                .end(function(err, res) {
+                    if (err) done(err);
+                    else done();
+                });
+        });
+
+        // FIXME: add tests for incomplete requests
+
+        it('should return token', function(done) {
+            request(app)
+                .post('/api/v1/users/' + userId + '/authenticate')
+                .expect(200)
+                .send(testUser)
+                .end(function(err, res) {
+                    if (err) done(err);
+                    else {
+                        var tok = res.body.token;
+
+                        expect(tok).not.to.equal(null);
+                        token = tok;
+
+                        done();
+                    }
+                });
+        });
+    });
 })();
