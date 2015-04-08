@@ -113,6 +113,20 @@
                 });
         });
 
+        it('should return BadRequest', function(done) {
+            request(app)
+                .post('/api/v1/users/' + userId + '/authenticate')
+                .expect(400)
+                .send({
+                    email: 'foo@bar',
+                    pasword: testUser.password
+                })
+            .end(function(err, res) {
+                if (err) done(err);
+                else done();
+            });
+        });
+
         // FIXME: add tests for incomplete requests
 
         it('should return token', function(done) {
