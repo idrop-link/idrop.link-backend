@@ -203,6 +203,7 @@
      * @apiSuccess (200) token the requested token
      *
      * @apiParam {String} email for the user
+     * @apiParam {String} email unique email address
      */
     app.post('/api/v1/users/:userId/authenticate', passport.authenticate('local', {
         session: false
