@@ -77,14 +77,21 @@
                     res.json({
                         message: 'no such user'
                     });
+                } else {
+                    if (doc.email !== incomingToken.email) {
+                        res.status = 401;
+                        res.json({
+                            messag: 'unauthorized'
+                        });
+                    } else {
+                        res.status = 200;
+                        res.json({
+                            _id: doc._id,
+                            email: doc.email,
+                            creation_date: doc.creation_date
+                        });
+                    }
                 }
-
-                res.status = 200;
-                res.json({
-                    _id: doc._id,
-                    email: doc.email,
-                    creation_date: doc.creation_date
-                });
             });
         } else {
             res.status = 401;
