@@ -24,7 +24,7 @@
      */
     app.post('/api/v1/users/', function(req, res) {
         if (req.body.email === undefined && req.body.password === undefined) {
-            res
+            return res
                 .status(400)
                 .json({
                     message: 'missing parameters'
@@ -36,11 +36,11 @@
             password: req.body.password
         }), req.body.password, function(err, doc) {
             if (err) {
-                res
+                return res
                     .status(400)
                     .json(err);
             } else {
-                res
+                return res
                     .status(201)
                     .json({
                         message: 'registered user',
@@ -78,26 +78,26 @@
         if (incomingToken && incomingToken.email) {
             User.findById(req.params.userId, function(err, doc) {
                 if (err) {
-                    res
+                    return res
                         .status(500)
                         .json(err);
                 }
 
                 if (!doc) {
-                    res
+                    return res
                         .status(404)
                         .json({
                             message: 'no such user'
                         });
                 } else {
                     if (doc.email !== incomingToken.email) {
-                        res
+                        return res
                             .status(401)
                             .json({
                                 message: 'unauthorized'
                             });
                     } else {
-                        res
+                        return res
                             .status(200)
                             .json({
                                 _id: doc._id,
@@ -108,7 +108,7 @@
                 }
             });
         } else {
-            res
+            return res
                 .status(401)
                 .json({
                     message: 'unauthorized'
@@ -139,20 +139,20 @@
         if (incomingToken && incomingToken.email) {
             User.findById(req.body.userId, function(err, doc) {
                 if (err) {
-                    res
+                    return res
                         .status(500)
                         .json(err);
                 }
 
                 if (!doc) {
-                    res
+                    return res
                         .status(404)
                         .json({
                             message: err
                         });
                 } else {
                     if (doc.email != incomingToken.email) {
-                        res
+                        return res
                             .status(401)
                             .json({
                                 message: 'unauthorized'
@@ -160,11 +160,11 @@
                     } else {
                         doc.remove(function(err, doc) {
                             if (err) {
-                                res
+                                return res
                                     .status(500)
                                     .json(err);
                             } else {
-                                res
+                                return res
                                     .status(200)
                                     .json({
                                         message: 'removed user'
@@ -175,7 +175,7 @@
                 }
             });
         } else {
-            res
+            return res
                 .status(401)
                 .json({
                     message: 'unauthorized'
@@ -205,15 +205,15 @@
         if (req.user) {
             User.findById(req.params.userId, function(err, doc) {
                 if (err) {
-                    res
+                    return res
                         .status(500)
                         .json({
                             message: err
                         });
                 }
 
-                if (!doc) {
-                    res
+                if (doc === null) {
+                    return res
                         .status(404)
                         .json({
                             message: 'no such user'
@@ -221,7 +221,7 @@
                 }
 
                 if (doc.email != req.body.email) {
-                    res
+                    return res
                         .status(401)
                         .json({
                             message: 'unauthorized'
@@ -233,14 +233,14 @@
 
                 doc.save(function(err, doc) {
                     if (err) {
-                        res
+                        return res
                             .status(500)
                             .json({
                                 message: err
                             });
                     }
 
-                    res
+                    return res
                         .status(200)
                         .json({
                             token: token
@@ -248,7 +248,7 @@
                     });
             });
         } else {
-            res
+            return res
                 .status(401)
                 .json({
                     message: 'unauthorized'
