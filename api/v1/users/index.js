@@ -22,31 +22,29 @@
      * @apiParam {String} email unique email address
      * @apiParam {String} password the users password
      */
-    app.post('/api/v1/users/', function(req, res, next) {
-        console.log(req.body);
+    app.post('/api/v1/users/', function(req, res) {
         if (req.body.email === undefined && req.body.password === undefined) {
-            res.status = 400;
-            res.json({
-                message: "bad request"
-            });
-
-            next();
+            res
+                .status(400)
+                .json({
+                    message: "bad request"
+                });
         }
 
         User.register(new User({
             email: req.body.email
         }), req.body.password, function(err, doc) {
             if (err) {
-                res.status = 400;
-                res.json({
-                    message: err
-                });
+                res
+                    .status(400)
+                    .json(err);
             } else {
-                res.status = 201;
-                res.json({
-                    message: 'registered user',
-                    _id: doc._id
-                });
+                res
+                    .status(201)
+                    .json({
+                        message: 'registered user',
+                        _id: doc._id
+                    });
             }
         });
     });
@@ -79,38 +77,43 @@
         if (incomingToken && incomingToken.email) {
             User.findById(req.params.userId, function(err, doc) {
                 if (err) {
-                    res.status = 500;
-                    res.json({
-                        message: err
-                    });
+                    res
+                        .status(500)
+                        .json({
+                            message: err
+                        });
                 }
 
                 if (!doc) {
-                    res.status = 404;
-                    res.json({
-                        message: 'no such user'
-                    });
+                    res
+                        .status(404)
+                        .json({
+                            message: 'no such user'
+                        });
                 } else {
                     if (doc.email !== incomingToken.email) {
-                        res.status = 401;
-                        res.json({
-                            messag: 'unauthorized'
-                        });
+                        res
+                            .status(401)
+                            .json({
+                                message: 'unauthorized'
+                            });
                     } else {
-                        res.status = 200;
-                        res.json({
-                            _id: doc._id,
-                            email: doc.email,
-                            creation_date: doc.creation_date
-                        });
+                        res
+                            .status(200)
+                            .json({
+                                _id: doc._id,
+                                email: doc.email,
+                                creation_date: doc.creation_date
+                            });
                     }
                 }
             });
         } else {
-            res.status = 401;
-            res.json({
-                message: 'unauthorized'
-            });
+            res
+                .status(401)
+                .json({
+                    message: 'unauthorized'
+                });
         }
     });
 
@@ -137,45 +140,51 @@
         if (incomingToken && incomingToken.email) {
             User.findById(req.body.userId, function(err, doc) {
                 if (err) {
-                    res.status = 400;
-                    res.json({
-                        message: err
-                    });
+                    res
+                        .status(400)
+                        .json({
+                            message: err
+                        });
                 }
 
                 if (!doc) {
-                    res.status = 404;
-                    res.json({
-                        message: err
-                    });
+                    res
+                        .status(404)
+                        .json({
+                            message: err
+                        });
                 } else {
                     if (doc.email != incomingToken.email) {
-                        res.status = 401;
-                        res.json({
-                            message: 'unauthorized'
-                        });
+                        res
+                            .status(401)
+                            .json({
+                                message: 'unauthorized'
+                            });
                     } else {
                         doc.remove(function(err, doc) {
                             if (err) {
-                                res.status = 500;
-                                res.json({
-                                    message: err
-                                });
+                                res
+                                    .status(500)
+                                    .json({
+                                        message: err
+                                    });
                             } else {
-                                res.status = 200;
-                                res.json({
-                                    message: 'removed user'
-                                });
+                                res
+                                    .status(200)
+                                    .json({
+                                        message: 'removed user'
+                                    });
                             }
                         });
                     }
                 }
             });
         } else {
-            res.status = 401;
-            res.json({
-                message: 'unauthorized'
-            });
+            res
+                .status(401)
+                .json({
+                    message: 'unauthorized'
+                });
         }
     });
 
@@ -200,17 +209,19 @@
         if (req.user) {
             User.findOne(req.user.email, function(err, doc) {
                 if (err) {
-                    res.status = 500;
-                    res.json({
-                        message: err
-                    });
+                    res
+                        .status(500)
+                        .json({
+                            message: err
+                        });
                 }
 
                 if (!doc) {
-                    res.status = 404;
-                    res.json({
-                        message: "no such user"
-                    });
+                    res
+                        .status(404)
+                        .json({
+                            message: "no such user"
+                        });
                 }
 
                 doc.invalidateTokens();
@@ -218,23 +229,26 @@
 
                 doc.save(function(err, doc) {
                     if (err) {
-                        res.status = 500;
-                        res.json({
-                            message: err
-                        });
+                        res
+                            .status(500)
+                            .json({
+                                message: err
+                            });
                     }
 
-                    res.status = 200;
-                    res.json({
-                        token: token
+                    res
+                        .status(200)
+                        .json({
+                            token: token
+                        });
                     });
-                });
             });
         } else {
-            res.status = 401;
-            res.json({
-                message: "unauthorized"
-            });
+            res
+                .status(401)
+                .json({
+                    message: "unauthorized"
+                });
         }
     });
 
