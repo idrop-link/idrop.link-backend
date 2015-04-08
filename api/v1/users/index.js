@@ -73,7 +73,7 @@
      */
     app.get('/api/v1/users/:userId', function(req, res) {
         // validate token
-        var incomingToken = User.decodeJwt(req.headers.token);
+        var incomingToken = User.decodeJwt(req.headers.authorization);
 
         if (incomingToken && incomingToken.email) {
             User.findById(req.params.userId, function(err, doc) {
