@@ -1,4 +1,4 @@
-# idrop.link-backend
+# idrop.link-backend ![strider build badge](http://ci.andinfinity.de/andinfinity/idrop.link-backend/badge?branch=master) ![david dependency badge](https://david-dm.org/andinfinity/idrop.link-backend.svg)
 idrop.link - self hosted personal screenshot and file cloud to share with your friends, colleagues and family
 
 ## Development
