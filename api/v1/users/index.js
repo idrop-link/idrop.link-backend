@@ -6,6 +6,9 @@
         passport = require('passport'),
         path = require('path');
 
+    var should = require('chai').should,
+        assert = require('chai').assert;
+
     var User = require(path.join(__dirname, '../../..', '/models/user'));
 
     // User
