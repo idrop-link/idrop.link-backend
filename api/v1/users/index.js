@@ -254,7 +254,7 @@
             res
                 .status(401)
                 .json({
-                    message: "unauthorized"
+                    message: 'unauthorized'
                 });
         }
     });
