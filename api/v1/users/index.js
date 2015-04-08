@@ -64,9 +64,7 @@
         var incomingToken = User.decodeJwt(req.headers.token);
 
         if (incomingToken && incomingToken.email) {
-            User.findOne({
-                _id: req.params.userId
-            }, function(err, doc) {
+            User.findById(req.params.userId, function(err, doc) {
                 if (err) {
                     res.status = 500;
                     res.json({
