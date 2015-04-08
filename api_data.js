@@ -176,7 +176,14 @@ define({ "api": [
             "type": "String",
             "optional": false,
             "field": "email",
-            "description": "<p>for the user</p> "
+            "description": "<p>unique email address</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "password",
+            "description": "<p>the users password</p> "
           }
         ]
       }
