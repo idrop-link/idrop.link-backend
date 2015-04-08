@@ -133,6 +133,31 @@
                 });
         });
     });
+
+    // FIXME: get profiles of other users (email not matching)
+    describe('GET /users/:id', function() {
+        it('should return unauthorized warning', function(done) {
+            request(app)
+                .get('/api/v1/users/' + userId)
+                .expect(401)
+                .end(function(err, res) {
+                    if (err) done(err);
+                    else done();
+                });
+        });
+
+        it('should get the user profile', function(done) {
+            request(app)
+                .get('/api/v1/users/' + userId)
+                .expect(200)
+                .set('Authorization', token)
+                .end(function(err, res) {
+                    if (err) done(err);
+                    else done();
+                });
+        });
+    });
+
     describe('DELETE /users/:id', function() {
         it('should not delete user', function(done) {
             request(app)
