@@ -66,9 +66,9 @@
     "group": "User",
     "success": {
       "fields": {
-        "200": [
+        "201": [
           {
-            "group": "200",
+            "group": "201",
             "type": "String",
             "optional": false,
             "field": "success",
@@ -169,6 +169,64 @@
             "optional": false,
             "field": "email",
             "description": "<p>for the user</p> "
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "api/v1/users/index.js",
+    "groupTitle": "User"
+  },
+  {
+    "type": "delete",
+    "url": "/users/:id",
+    "title": "Delete User",
+    "name": "DeleteUser",
+    "group": "User",
+    "error": {
+      "fields": {
+        "400": [
+          {
+            "group": "400",
+            "optional": false,
+            "field": "message",
+            "description": "<p>id and email do not match</p> "
+          }
+        ],
+        "401": [
+          {
+            "group": "401",
+            "optional": false,
+            "field": "message",
+            "description": "<p>unauthorized</p> "
+          }
+        ],
+        "404": [
+          {
+            "group": "404",
+            "optional": false,
+            "field": "message",
+            "description": "<p>user with id not found</p> "
+          }
+        ],
+        "500": [
+          {
+            "group": "500",
+            "optional": false,
+            "field": "message",
+            "description": "<p>error while removing user</p> "
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "optional": false,
+            "field": "message",
+            "description": "<p>removed user</p> "
           }
         ]
       }
