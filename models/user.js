@@ -94,7 +94,9 @@
     };
 
     UserSchema.methods.createToken = function() {
-        var token = this.constructor.encodeJwt(this.email);
+        var token = this.constructor.encodeJwt({
+            email: this.email
+        });
 
         this.token = new Token({
             token: token
