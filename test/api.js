@@ -3,6 +3,8 @@
 
     var request = require('supertest'),
         express = require('express'),
+        should = require('chai').should,
+        expect = require('chai').expect,
         assert = require('chai').assert;
 
     var testUser = {
