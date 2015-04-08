@@ -34,7 +34,7 @@
                 .end(function(err, res) {
                     if (err) done(err);
 
-                    if (res.name == 'ValidationError') {
+                    if (res.body.name == 'BadRequestError') {
                         done();
                     } else {
                         done(new Error('Two users with the same email are not supposed to exist!'));
