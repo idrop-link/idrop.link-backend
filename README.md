@@ -15,7 +15,7 @@ When everything is set up, run the app like this (you don't have to specify `$MO
 
 ```
 env $MONGODB_URI='localhost:27017/idroplink' node index
-``
+```
 
 ## Production
 It is currently not advised to run this project in production mode.
