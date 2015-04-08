@@ -31,7 +31,7 @@
             } else {
                 res.status = 200;
                 res.json({
-                    message: "registered user",
+                    message: 'registered user',
                     _id: doc._id
                 });
             }
@@ -77,7 +77,7 @@
                 if (!doc) {
                     res.status = 404;
                     res.json({
-                        message: "no such user"
+                        message: 'no such user'
                     });
                 }
 
