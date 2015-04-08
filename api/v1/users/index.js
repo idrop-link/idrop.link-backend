@@ -143,10 +143,10 @@
         session: false
     }), function(req, res) {
         // validate token
-        var incomingToken = User.decodeJwt(req.headers.token);
+        var incomingToken = User.decodeJwt(req.headers.authorization);
 
         if (incomingToken && incomingToken.email) {
-            User.findById(req.body.userId, function(err, doc) {
+            User.findById(req.params.userId, function(err, doc) {
                 if (err) {
                     return res
                         .status(500)
