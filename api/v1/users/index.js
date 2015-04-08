@@ -3,9 +3,10 @@
 
     var express = require('express'),
         app = module.exports = express(),
-        passport = require('passport');
+        passport = require('passport'),
+        path = require('path');
 
-    var User = 
+    var User = require(path.join(__dirname, '../../..', '/models/user'));
 
     // User
     /**
