@@ -140,6 +140,14 @@
      *
      */
     app.delete('/api/v1/users/:userId', function(req, res) {
+		if (!req.headers.authorization) {
+			return res
+				.status(401)
+				.json({
+					message: 'token missing'
+				});
+		}
+
         // validate token
         var incomingToken = User.decodeJwt(req.headers.authorization);
 
@@ -183,9 +191,9 @@
             });
         } else {
             return res
-                .status(401)
+                .status(400)
                 .json({
-                    message: 'unauthorized'
+                    message: 'bad request'
                 });
         }
     });
