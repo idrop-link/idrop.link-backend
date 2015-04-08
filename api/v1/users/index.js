@@ -202,6 +202,7 @@
      * @apiError (500) message error while generating token
      * @apiError (404) message no such user
      * @apiError (401) message unauthorized
+	 * @apiError (400) message bad request
      *
      * @apiSuccess (200) token the requested token
      *
@@ -258,9 +259,9 @@
             });
         } else {
             return res
-                .status(401)
+                .status(400)
                 .json({
-                    message: 'unauthorized'
+                    message: 'bad request'
                 });
         }
     });
