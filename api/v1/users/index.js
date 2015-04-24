@@ -8,6 +8,63 @@
 
     var User = require(path.join(__dirname, '../../..', '/models/user'));
 
+    function executeOnAuthenticatedRequest(req, res, callback) {
+        if (!req.headers.authorization) {
+            return res
+                .status(401)
+                .json({
+                    message: 'token missing'
+                });
+        }
+
+        // validate token
+        var incomingToken = User.decodeJwt(req.headers.authorization);
+
+        if (incomingToken && incomingToken.email) {
+            User.findById(req.params.userId, function(err, doc) {
+                if (err) {
+                    return res
+                        .status(500)
+                        .json(err);
+                }
+
+                if (!doc) {
+                    return res
+                        .status(404)
+                        .json({
+                            message: 'no such user'
+                        });
+                } else {
+                    if (doc.email !== incomingToken.email) {
+                        return res
+                            .status(401)
+                            .json({
+                                message: 'unauthorized'
+                            });
+                    } else {
+                        if (doc.validateToken(req.headers.authorization)) {
+                            // start actual execution
+                            callback(doc);
+                        } else {
+                            // token expired or is invalid
+                            return res
+                                .status(401)
+                                .json({
+                                    message: 'token expired or invalid'
+                                });
+                        }
+                    }
+                }
+            });
+        } else {
+            return res
+                .status(400)
+                .json({
+                    message: 'bad request'
+                });
+        }
+    }
+
     // User
     /**
      * @api {post} /users Create User
@@ -70,59 +127,18 @@
      * @apiError (500) {String} message something went wrong
      * @apiError (404) {String} message no such user
      * @apiError (401) {String} message unauthorized
-	 * @apiError (400) {String} message bad request (missing token probably)
+     * @apiError (400) {String} message bad request (missing token probably)
      */
     app.get('/api/v1/users/:userId', function(req, res) {
-		if (!req.headers.authorization) {
-			return res
-				.status(401)
-				.json({
-					message: 'token missing'
-				});
-		}
-
-        // validate token
-        var incomingToken = User.decodeJwt(req.headers.authorization);
-
-        if (incomingToken && incomingToken.email) {
-            User.findById(req.params.userId, function(err, doc) {
-                if (err) {
-                    return res
-                        .status(500)
-                        .json(err);
-                }
-
-                if (!doc) {
-                    return res
-                        .status(404)
-                        .json({
-                            message: 'no such user'
-                        });
-                } else {
-                    if (doc.email !== incomingToken.email) {
-                        return res
-                            .status(401)
-                            .json({
-                                message: 'unauthorized'
-                            });
-                    } else {
-                        return res
-                            .status(200)
-                            .json({
-                                _id: doc._id,
-                                email: doc.email,
-                                creation_date: doc.creation_date
-                            });
-                    }
-                }
-            });
-        } else {
+        executeOnAuthenticatedRequest(req, res, function(doc) {
             return res
-                .status(400)
+                .status(200)
                 .json({
-                    message: 'bad request'
+                    _id: doc._id,
+                    email: doc.email,
+                    creation_date: doc.creation_date
                 });
-        }
+        });
     });
 
     /**
@@ -140,54 +156,87 @@
      *
      */
     app.delete('/api/v1/users/:userId', function(req, res) {
-		if (!req.headers.authorization) {
-			return res
-				.status(401)
-				.json({
-					message: 'token missing'
-				});
-		}
-
-        // validate token
-        var incomingToken = User.decodeJwt(req.headers.authorization);
-
-        if (incomingToken && incomingToken.email) {
-            User.findById(req.params.userId, function(err, doc) {
+        executeOnAuthenticatedRequest(req, res, function(doc) {
+            doc.remove(function(err, doc) {
                 if (err) {
                     return res
                         .status(500)
                         .json(err);
-                }
-
-                if (!doc) {
+                } else {
                     return res
-                        .status(404)
+                        .status(200)
+                        .json({
+                            message: 'removed user'
+                        });
+                }
+            });
+        });
+    });
+
+    // Tokens
+    /**
+     * @api {post} /users/:id/authenticate Create Token for a User
+     *
+     * @apiName CreateUserToken
+     * @apiGroup User
+     *
+     * @apiError (500) message error while generating token
+     * @apiError (404) message no such user
+     * @apiError (401) message unauthorized
+     * @apiError (400) message bad request
+     *
+     * @apiSuccess (200) token the requested token
+     *
+     * @apiParam {String} email unique email address
+     * @apiParam {String} password the users password
+     */
+    app.post('/api/v1/users/:userId/authenticate', passport.authenticate('local', {
+        session: false
+    }), function(req, res) {
+        if (req.user) {
+            User.findById(req.params.userId, function(err, doc) {
+                if (err) {
+                    return res
+                        .status(500)
                         .json({
                             message: err
                         });
-                } else {
-                    if (doc.email != incomingToken.email) {
-                        return res
-                            .status(401)
-                            .json({
-                                message: 'unauthorized'
-                            });
-                    } else {
-                        doc.remove(function(err, doc) {
-                            if (err) {
-                                return res
-                                    .status(500)
-                                    .json(err);
-                            } else {
-                                return res
-                                    .status(200)
-                                    .json({
-                                        message: 'removed user'
-                                    });
-                            }
-                        });
-                    }
                 }
+
+                if (doc === null) {
+                    return res
+                        .status(404)
+                        .json({
+                            message: 'no such user'
+                        });
+                }
+
+                if (doc.email != req.body.email) {
+                    return res
+                        .status(401)
+                        .json({
+                            message: 'unauthorized'
+                        });
+                }
+
+                doc.invalidateTokens();
+                var token = doc.createToken();
+
+                doc.save(function(err, doc) {
+                    if (err) {
+                        return res
+                            .status(500)
+                            .json({
+                                message: err
+                            });
+                    }
+
+                    return res
+                        .status(200)
+                        .json({
+                            token: token
+                        });
+                });
             });
         } else {
             return res
