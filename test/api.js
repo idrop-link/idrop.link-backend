@@ -121,10 +121,10 @@
                     email: 'foo@bar',
                     pasword: testUser.password
                 })
-            .end(function(err, res) {
-                if (err) done(err);
-                else done();
-            });
+                .end(function(err, res) {
+                    if (err) done(err);
+                    else done();
+                });
         });
 
         // FIXME: add tests for incomplete requests
