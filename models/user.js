@@ -84,6 +84,28 @@
         });
     };
 
+    UserSchema.methods.validateToken = function(token) {
+        var validTokens = [];
+
+        for (var i = 0; i < this.tokens.length; i++) {
+            if (!this.tokens[i].isExpired()) {
+                validTokens.push(this.tokens[i]);
+            }
+        }
+
+        // inconsistent state of tokens detected, invalidate all tokens
+        if (validTokens.length > 1) {
+            this.invalidateTokens();
+            return false;
+        } else {
+            if (validTokens[0].token == token) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    };
+
     /**
      * Invalidate all tokens of the user to guarantee uniqueness of a token.
      */
@@ -96,11 +118,11 @@
     UserSchema.methods.createToken = function() {
         var token = this.constructor.encodeJwt({
             email: this.email
-        });
+        })
 
-        this.token = new Token({
+        this.tokens.push(new Token({
             token: token
-        });
+        }));
 
         return token;
     };

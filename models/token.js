@@ -5,13 +5,15 @@
         Schema = mongoose.Schema;
 
     var TokenSchema = new Schema({
-        token: String,
+        token: {
+            type: String,
+            required: true
+        },
         creation_date: {
             type: Date,
             default: Date.now
         },
-        expiration_date: Date,
-        invalidation_date: Date
+        expiration_date: Date
     });
 
     /* methods */
@@ -23,20 +25,20 @@
     TokenSchema.methods.isExpired = function() {
         var now = new Date();
 
-        if (this.expiration_date === null)
+        // FIXME: we can't compare dates this way
+        if (this.expiration_date === undefined || this.expiration_date >= now.getTime()) {
             return false;
-
-        if (this.expiration_date >= now.getTime())
+        } else {
             return true;
-        else
-            return false;
+        }
     };
 
     /**
      * Invalidates this very token.
      */
     TokenSchema.methods.invalidate = function() {
-        this.invalidation_date = Date().getTime();
+        var now = new Date();
+        this.expiration_date = now.getTime();
     };
 
     var Token = mongoose.model('Token', TokenSchema);
