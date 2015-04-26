@@ -71,8 +71,8 @@
             "group": "201",
             "type": "String",
             "optional": false,
-            "field": "success",
-            "description": "<p>contains the success description</p> "
+            "field": "_id",
+            "description": "<p>the users id</p> "
           }
         ]
       }
@@ -304,6 +304,19 @@
         ]
       }
     },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "token",
+            "description": ""
+          }
+        ]
+      }
+    },
     "version": "0.0.0",
     "filename": "api/v1/users/index.js",
     "groupTitle": "User"
@@ -381,8 +394,122 @@
         ]
       }
     },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "token",
+            "description": ""
+          }
+        ]
+      }
+    },
     "version": "0.0.0",
     "filename": "api/v1/users/index.js",
     "groupTitle": "User"
+  },
+  {
+    "type": "get",
+    "url": "/users/:email/idformail",
+    "title": "Get User ID by email",
+    "name": "GetUserMailByID",
+    "group": "User",
+    "error": {
+      "fields": {
+        "400": [
+          {
+            "group": "400",
+            "optional": false,
+            "field": "message",
+            "description": "<p>id and email do not match</p> "
+          }
+        ],
+        "401": [
+          {
+            "group": "401",
+            "optional": false,
+            "field": "message",
+            "description": "<p>unauthorized</p> "
+          }
+        ],
+        "404": [
+          {
+            "group": "404",
+            "optional": false,
+            "field": "message",
+            "description": "<p>user with email not found</p> "
+          }
+        ],
+        "500": [
+          {
+            "group": "500",
+            "optional": false,
+            "field": "message",
+            "description": "<p>error</p> "
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "201": [
+          {
+            "group": "201",
+            "type": "String",
+            "optional": false,
+            "field": "_id",
+            "description": "<p>the users id</p> "
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "email",
+            "description": "<p>unique email address</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "password",
+            "description": "<p>the users password</p> "
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "api/v1/users/index.js",
+    "groupTitle": "User"
+  },
+  {
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "token",
+            "description": ""
+          }
+        ]
+      }
+    },
+    "type": "",
+    "url": "",
+    "version": "0.0.0",
+    "filename": "api/v1/users/index.js",
+    "group": "_Users_cocoanaut_Documents_Development_idrop_link_idrop_link_backend_api_v1_users_index_js",
+    "groupTitle": "_Users_cocoanaut_Documents_Development_idrop_link_idrop_link_backend_api_v1_users_index_js",
+    "name": ""
   }
 ]
