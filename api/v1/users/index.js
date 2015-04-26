@@ -72,7 +72,7 @@
      * @apiName CreateUser
      * @apiGroup User
      *
-     * @apiSuccess (201) {String} success contains the success description
+     * @apiSuccess (201) {String} _id the users id
      *
      * @apiError (400) {String} message contains the error description
      *
@@ -128,6 +128,8 @@
      * @apiError (404) {String} message no such user
      * @apiError (401) {String} message unauthorized
      * @apiError (400) {String} message bad request (missing token probably)
+	 *
+     * @apiParam {String} token
      */
     app.get('/api/v1/users/:userId', function(req, res) {
         executeOnAuthenticatedRequest(req, res, function(doc) {
@@ -153,7 +155,8 @@
      * @apiError (400) message id and email do not match
      *
      * @apiSuccess (200) message removed user
-     *
+	 *
+     * @apiParam {String} token
      */
     app.delete('/api/v1/users/:userId', function(req, res) {
         executeOnAuthenticatedRequest(req, res, function(doc) {
@@ -261,24 +264,24 @@
      * @apiSuccess (200) token the requested token
      *
      */
-    app.post('/api/v1/users/:userId/deauthenticate', function (req, res) {
-		executeOnAuthenticatedRequest(req, res, function(doc) {
-			doc.save(function(err, doc) {
-				if (err) {
-					return res
-						.status(500)
-						.json({
-							message: err
-						});
-				}
+    app.post('/api/v1/users/:userId/deauthenticate', function(req, res) {
+        executeOnAuthenticatedRequest(req, res, function(doc) {
+            doc.save(function(err, doc) {
+                if (err) {
+                    return res
+                        .status(500)
+                        .json({
+                            message: err
+                        });
+                }
 
-				return res
-					.status(200)
-					.json({
-						message: 'success'
-					});
-			});
-		});
+                return res
+                    .status(200)
+                    .json({
+                        message: 'success'
+                    });
+            });
+        });
     });
 
     // Drops
