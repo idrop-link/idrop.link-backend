@@ -176,6 +176,60 @@
         });
     });
 
+	/**
+	 * @api {get} /users/:email/idformail Get User ID by email
+	 *
+	 * @apiName GetUserMailByID
+	 * @apiGroup User
+	 *
+     * @apiError (500) message error
+     * @apiError (404) message user with email not found
+     * @apiError (401) message unauthorized
+     * @apiError (400) message id and email do not match
+	 *
+     * @apiSuccess (201) {String} _id the users id
+	 *
+     * @apiParam {String} email unique email address
+     * @apiParam {String} password the users password
+	*/
+    app.get('/api/v1/users/:email/idformail', passport.authenticate('local', {
+        session: false
+    }), function(req, res) {
+        if (req.user) {
+            User.find({
+                email: req.params.email
+            }, function(err, doc) {
+                if (err) {
+                    return res
+                        .status(500)
+                        .json({
+                            message: err
+                        });
+                }
+
+                if (doc === null) {
+                    return res
+                        .status(404)
+                        .json({
+                            message: 'no such user'
+                        });
+                }
+
+                return res
+                    .status(200)
+                    .json({
+                        _id: doc._id
+                    });
+            });
+        } else {
+            return res
+                .status(400)
+                .json({
+                    message: 'bad request'
+                });
+        }
+    });
+
     // Tokens
     /**
      * @api {post} /users/:id/authenticate Create Token for a User

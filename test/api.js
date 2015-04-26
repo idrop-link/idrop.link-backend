@@ -91,6 +91,22 @@
         });
     });
 
+    describe('GET /users/:email/idformail', function() {
+        it('should return id', function(done) {
+            request(app)
+                .get('/api/v1/users/' + testUser.email + '/idformail')
+                .expect(200)
+                .send(testUser)
+                .end(function(err, res) {
+                    if (err) done(err);
+                    else {
+                        expect(res.body._id).not.to.equal(null);
+                        done();
+                    }
+                });
+        });
+    });
+
     describe('POST /users/:id/authenticate', function() {
         it('should not find user', function(done) {
             request(app)
