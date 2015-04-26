@@ -9,7 +9,7 @@
             type: String,
             required: true
         },
-        creation_date: {
+        issuance_date: {
             type: Date,
             default: Date.now
         },
@@ -25,8 +25,7 @@
     TokenSchema.methods.isExpired = function() {
         var now = new Date();
 
-        // FIXME: we can't compare dates this way
-        if (this.expiration_date === undefined || this.expiration_date >= now.getTime()) {
+        if (this.expiration_date === undefined || Date.parse(this.expiration_date) < now.getTime()) {
             return false;
         } else {
             return true;
