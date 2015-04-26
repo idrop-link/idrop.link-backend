@@ -193,6 +193,64 @@ define({ "api": [
     "groupTitle": "User"
   },
   {
+    "type": "post",
+    "url": "/users/:id/deauthenticate",
+    "title": "Log out",
+    "name": "DeauthenticateUser",
+    "group": "User",
+    "error": {
+      "fields": {
+        "400": [
+          {
+            "group": "400",
+            "optional": false,
+            "field": "message",
+            "description": "<p>bad request</p> "
+          }
+        ],
+        "401": [
+          {
+            "group": "401",
+            "optional": false,
+            "field": "message",
+            "description": "<p>unauthorized</p> "
+          }
+        ],
+        "404": [
+          {
+            "group": "404",
+            "optional": false,
+            "field": "message",
+            "description": "<p>no such user</p> "
+          }
+        ],
+        "500": [
+          {
+            "group": "500",
+            "optional": false,
+            "field": "message",
+            "description": "<p>error while generating token</p> "
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "optional": false,
+            "field": "token",
+            "description": "<p>the requested token</p> "
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "api/v1/users/index.js",
+    "groupTitle": "User"
+  },
+  {
     "type": "delete",
     "url": "/users/:id",
     "title": "Delete User",
