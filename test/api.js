@@ -128,6 +128,47 @@
         });
 
         // FIXME: add tests for incomplete requests
+        it('should return token', function(done) {
+            request(app)
+                .post('/api/v1/users/' + userId + '/authenticate')
+                .expect(200)
+                .send(testUser)
+                .end(function(err, res) {
+                    if (err) done(err);
+                    else {
+                        var tok = res.body.token;
+
+                        expect(tok).not.to.equal(null);
+                        token = tok;
+
+                        done();
+                    }
+                });
+        });
+    });
+
+    describe('POST: /users/:id/deauthenticate', function() {
+        it('should invalidate tokens', function(done) {
+            request(app)
+                .post('/api/v1/users/' + userId + '/deauthenticate')
+                .expect(200)
+                .set('Authorization', token)
+                .end(function(err, res) {
+                    if (err) done(err);
+                    else done();
+                });
+        });
+
+        it('should reject authed request with invalid token', function(done) {
+            request(app)
+                .get('/api/v1/users/' + userId)
+                .expect(401)
+                .set('Authorization', token)
+                .end(function(err, res) {
+                    if (err) done(err);
+                    else done();
+                });
+        });
 
         it('should return token', function(done) {
             request(app)

@@ -247,78 +247,38 @@
         }
     });
 
-    // Tokens
     /**
-     * @api {post} /users/:id/authenticate Create Token for a User
+     * @api {post} /users/:id/deauthenticate Log out
      *
-     * @apiName CreateUserToken
+     * @apiName DeauthenticateUser
      * @apiGroup User
      *
      * @apiError (500) message error while generating token
      * @apiError (404) message no such user
      * @apiError (401) message unauthorized
-	 * @apiError (400) message bad request
+     * @apiError (400) message bad request
      *
      * @apiSuccess (200) token the requested token
      *
-     * @apiParam {String} email unique email address
-     * @apiParam {String} password the users password
      */
-    app.post('/api/v1/users/:userId/authenticate', passport.authenticate('local', {
-        session: false
-    }), function(req, res) {
-        if (req.user) {
-            User.findById(req.params.userId, function(err, doc) {
-                if (err) {
-                    return res
-                        .status(500)
-                        .json({
-                            message: err
-                        });
-                }
+    app.post('/api/v1/users/:userId/deauthenticate', function (req, res) {
+		executeOnAuthenticatedRequest(req, res, function(doc) {
+			doc.save(function(err, doc) {
+				if (err) {
+					return res
+						.status(500)
+						.json({
+							message: err
+						});
+				}
 
-                if (doc === null) {
-                    return res
-                        .status(404)
-                        .json({
-                            message: 'no such user'
-                        });
-                }
-
-                if (doc.email != req.body.email) {
-                    return res
-                        .status(401)
-                        .json({
-                            message: 'unauthorized'
-                        });
-                }
-
-                doc.invalidateTokens();
-                var token = doc.createToken();
-
-                doc.save(function(err, doc) {
-                    if (err) {
-                        return res
-                            .status(500)
-                            .json({
-                                message: err
-                            });
-                    }
-
-                    return res
-                        .status(200)
-                        .json({
-                            token: token
-                        });
-                    });
-            });
-        } else {
-            return res
-                .status(400)
-                .json({
-                    message: 'bad request'
-                });
-        }
+				return res
+					.status(200)
+					.json({
+						message: 'success'
+					});
+			});
+		});
     });
 
     // Drops
