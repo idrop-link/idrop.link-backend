@@ -196,7 +196,7 @@
         session: false
     }), function(req, res) {
         if (req.user) {
-            User.find({
+            User.findOne({
                 email: req.params.email
             }, function(err, doc) {
                 if (err) {
