@@ -59,6 +59,375 @@
     "groupTitle": "APIv1"
   },
   {
+    "type": "delete",
+    "url": "/users/:id/drops/:id",
+    "title": "Delete drop of a User",
+    "name": "DeleteDrop",
+    "group": "Drop",
+    "description": "<p>Delete the drop</p> ",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "Token",
+            "description": "<p>The authorization token</p> "
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>success</p> "
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "api/v1/users/index.js",
+    "groupTitle": "Drop",
+    "error": {
+      "fields": {
+        "400": [
+          {
+            "group": "400",
+            "optional": false,
+            "field": "Bad",
+            "description": "<p>Request Error: Either malformed or missing                    parameters</p> "
+          }
+        ],
+        "401": [
+          {
+            "group": "401",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Token Error: Missing, invalid or                    expired token passed</p> "
+          },
+          {
+            "group": "401",
+            "optional": false,
+            "field": "Unauthorized",
+            "description": "<p>: You are not authorized to access this                 resource</p> "
+          }
+        ],
+        "404": [
+          {
+            "group": "404",
+            "optional": false,
+            "field": "User",
+            "description": "<p>Not Found</p> "
+          }
+        ],
+        "500": [
+          {
+            "group": "500",
+            "optional": false,
+            "field": "Internal",
+            "description": "<p>Server Error</p> "
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "get",
+    "url": "/users/:id/drops/:id",
+    "title": "Get details for a drop of a User",
+    "name": "GetDrop",
+    "group": "Drop",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "Token",
+            "description": "<p>The authorization token</p> "
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "optional": false,
+            "field": "_id",
+            "description": "<p>the drop id</p> "
+          },
+          {
+            "group": "200",
+            "optional": false,
+            "field": "name",
+            "description": "<p>the original file name</p> "
+          },
+          {
+            "group": "200",
+            "optional": false,
+            "field": "url",
+            "description": "<p>the file url</p> "
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "api/v1/users/index.js",
+    "groupTitle": "Drop",
+    "error": {
+      "fields": {
+        "400": [
+          {
+            "group": "400",
+            "optional": false,
+            "field": "Bad",
+            "description": "<p>Request Error: Either malformed or missing                    parameters</p> "
+          }
+        ],
+        "401": [
+          {
+            "group": "401",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Token Error: Missing, invalid or                    expired token passed</p> "
+          },
+          {
+            "group": "401",
+            "optional": false,
+            "field": "Unauthorized",
+            "description": "<p>: You are not authorized to access this                 resource</p> "
+          }
+        ],
+        "404": [
+          {
+            "group": "404",
+            "optional": false,
+            "field": "User",
+            "description": "<p>Not Found</p> "
+          },
+          {
+            "group": "404",
+            "optional": false,
+            "field": "Drop",
+            "description": "<p>Not Found</p> "
+          }
+        ],
+        "500": [
+          {
+            "group": "500",
+            "optional": false,
+            "field": "Internal",
+            "description": "<p>Server Error</p> "
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "post",
+    "url": "/users/:userId/drops'",
+    "title": "Initialize drop transaction",
+    "name": "InitializeDrop",
+    "group": "Drop",
+    "description": "<p>First step of drop upload: register coming drop and receive                 eventual URL for the drop to be accessed.</p> ",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "Token",
+            "description": "<p>The authorization token</p> "
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "optional": false,
+            "field": "_id",
+            "description": "<p>the drop id</p> "
+          },
+          {
+            "group": "200",
+            "optional": false,
+            "field": "name",
+            "description": "<p>the original file name</p> "
+          },
+          {
+            "group": "200",
+            "optional": false,
+            "field": "url",
+            "description": "<p>the file url</p> "
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "api/v1/users/index.js",
+    "groupTitle": "Drop",
+    "error": {
+      "fields": {
+        "400": [
+          {
+            "group": "400",
+            "optional": false,
+            "field": "Bad",
+            "description": "<p>Request Error: Either malformed or missing                    parameters</p> "
+          }
+        ],
+        "401": [
+          {
+            "group": "401",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Token Error: Missing, invalid or                    expired token passed</p> "
+          },
+          {
+            "group": "401",
+            "optional": false,
+            "field": "Unauthorized",
+            "description": "<p>: You are not authorized to access this                 resource</p> "
+          }
+        ],
+        "404": [
+          {
+            "group": "404",
+            "optional": false,
+            "field": "User",
+            "description": "<p>Not Found</p> "
+          }
+        ],
+        "500": [
+          {
+            "group": "500",
+            "optional": false,
+            "field": "Internal",
+            "description": "<p>Server Error</p> "
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "post",
+    "url": "/users/:id/drops/:id",
+    "title": "Upload file to initialized drop",
+    "group": "Drop",
+    "name": "UploadDrop",
+    "description": "<p>Eventual upload of the drop. See                 InitializeDrop for the first step.</p> ",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "Token",
+            "description": "<p>The authorization token</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "File",
+            "optional": false,
+            "field": "data",
+            "description": "<p>the file to be uploaded</p> "
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "optional": false,
+            "field": "message",
+            "description": "<p>success</p> "
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "400": [
+          {
+            "group": "400",
+            "optional": false,
+            "field": "Uninitialized",
+            "description": "<p>drop</p> "
+          },
+          {
+            "group": "400",
+            "optional": false,
+            "field": "Bad",
+            "description": "<p>Request Error: Either malformed or missing                    parameters</p> "
+          }
+        ],
+        "401": [
+          {
+            "group": "401",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Token Error: Missing, invalid or                    expired token passed</p> "
+          },
+          {
+            "group": "401",
+            "optional": false,
+            "field": "Unauthorized",
+            "description": "<p>: You are not authorized to access this                 resource</p> "
+          }
+        ],
+        "404": [
+          {
+            "group": "404",
+            "optional": false,
+            "field": "User",
+            "description": "<p>Not Found</p> "
+          },
+          {
+            "group": "404",
+            "optional": false,
+            "field": "Drop",
+            "description": "<p>Not Found</p> "
+          }
+        ],
+        "409": [
+          {
+            "group": "409",
+            "optional": false,
+            "field": "Conflict",
+            "description": "<p>: Drop already uploaded</p> "
+          }
+        ],
+        "500": [
+          {
+            "group": "500",
+            "optional": false,
+            "field": "Internal",
+            "description": "<p>Server Error</p> "
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "api/v1/users/index.js",
+    "groupTitle": "Drop"
+  },
+  {
     "type": "post",
     "url": "/users",
     "title": "Create User",
@@ -73,19 +442,6 @@
             "optional": false,
             "field": "_id",
             "description": "<p>the users id</p> "
-          }
-        ]
-      }
-    },
-    "error": {
-      "fields": {
-        "400": [
-          {
-            "group": "400",
-            "type": "String",
-            "optional": false,
-            "field": "message",
-            "description": "<p>contains the error description</p> "
           }
         ]
       }
@@ -110,6 +466,32 @@
         ]
       }
     },
+    "error": {
+      "fields": {
+        "400": [
+          {
+            "group": "400",
+            "optional": false,
+            "field": "email",
+            "description": "<p>already in use</p> "
+          },
+          {
+            "group": "400",
+            "optional": false,
+            "field": "Bad",
+            "description": "<p>Request Error: Either malformed or missing                    parameters</p> "
+          }
+        ],
+        "500": [
+          {
+            "group": "500",
+            "optional": false,
+            "field": "Internal",
+            "description": "<p>Server Error</p> "
+          }
+        ]
+      }
+    },
     "version": "0.0.0",
     "filename": "api/v1/users/index.js",
     "groupTitle": "User"
@@ -128,6 +510,12 @@
             "optional": false,
             "field": "message",
             "description": "<p>bad request</p> "
+          },
+          {
+            "group": "400",
+            "optional": false,
+            "field": "Bad",
+            "description": "<p>Request Error: Either malformed or missing                    parameters</p> "
           }
         ],
         "401": [
@@ -136,6 +524,12 @@
             "optional": false,
             "field": "message",
             "description": "<p>unauthorized</p> "
+          },
+          {
+            "group": "401",
+            "optional": false,
+            "field": "Unauthorized",
+            "description": "<p>: You are not authorized to access this                 resource</p> "
           }
         ],
         "404": [
@@ -144,6 +538,12 @@
             "optional": false,
             "field": "message",
             "description": "<p>no such user</p> "
+          },
+          {
+            "group": "404",
+            "optional": false,
+            "field": "User",
+            "description": "<p>Not Found</p> "
           }
         ],
         "500": [
@@ -152,6 +552,12 @@
             "optional": false,
             "field": "message",
             "description": "<p>error while generating token</p> "
+          },
+          {
+            "group": "500",
+            "optional": false,
+            "field": "Internal",
+            "description": "<p>Server Error</p> "
           }
         ]
       }
@@ -198,112 +604,6 @@
     "title": "Log out",
     "name": "DeauthenticateUser",
     "group": "User",
-    "error": {
-      "fields": {
-        "400": [
-          {
-            "group": "400",
-            "optional": false,
-            "field": "message",
-            "description": "<p>bad request</p> "
-          }
-        ],
-        "401": [
-          {
-            "group": "401",
-            "optional": false,
-            "field": "message",
-            "description": "<p>unauthorized</p> "
-          }
-        ],
-        "404": [
-          {
-            "group": "404",
-            "optional": false,
-            "field": "message",
-            "description": "<p>no such user</p> "
-          }
-        ],
-        "500": [
-          {
-            "group": "500",
-            "optional": false,
-            "field": "message",
-            "description": "<p>error while generating token</p> "
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "200": [
-          {
-            "group": "200",
-            "optional": false,
-            "field": "token",
-            "description": "<p>the requested token</p> "
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "api/v1/users/index.js",
-    "groupTitle": "User"
-  },
-  {
-    "type": "delete",
-    "url": "/users/:id",
-    "title": "Delete User",
-    "name": "DeleteUser",
-    "group": "User",
-    "error": {
-      "fields": {
-        "400": [
-          {
-            "group": "400",
-            "optional": false,
-            "field": "message",
-            "description": "<p>id and email do not match</p> "
-          }
-        ],
-        "401": [
-          {
-            "group": "401",
-            "optional": false,
-            "field": "message",
-            "description": "<p>unauthorized</p> "
-          }
-        ],
-        "404": [
-          {
-            "group": "404",
-            "optional": false,
-            "field": "message",
-            "description": "<p>user with id not found</p> "
-          }
-        ],
-        "500": [
-          {
-            "group": "500",
-            "optional": false,
-            "field": "message",
-            "description": "<p>error while removing user</p> "
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "200": [
-          {
-            "group": "200",
-            "optional": false,
-            "field": "message",
-            "description": "<p>removed user</p> "
-          }
-        ]
-      }
-    },
     "parameter": {
       "fields": {
         "Parameter": [
@@ -311,15 +611,147 @@
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "token",
-            "description": ""
+            "field": "Token",
+            "description": "<p>The authorization token</p> "
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "optional": false,
+            "field": "message",
+            "description": "<p>success</p> "
           }
         ]
       }
     },
     "version": "0.0.0",
     "filename": "api/v1/users/index.js",
-    "groupTitle": "User"
+    "groupTitle": "User",
+    "error": {
+      "fields": {
+        "400": [
+          {
+            "group": "400",
+            "optional": false,
+            "field": "Bad",
+            "description": "<p>Request Error: Either malformed or missing                    parameters</p> "
+          }
+        ],
+        "401": [
+          {
+            "group": "401",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Token Error: Missing, invalid or                    expired token passed</p> "
+          },
+          {
+            "group": "401",
+            "optional": false,
+            "field": "Unauthorized",
+            "description": "<p>: You are not authorized to access this                 resource</p> "
+          }
+        ],
+        "404": [
+          {
+            "group": "404",
+            "optional": false,
+            "field": "User",
+            "description": "<p>Not Found</p> "
+          }
+        ],
+        "500": [
+          {
+            "group": "500",
+            "optional": false,
+            "field": "Internal",
+            "description": "<p>Server Error</p> "
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "delete",
+    "url": "/users/:id",
+    "title": "Delete User",
+    "name": "DeleteUser",
+    "group": "User",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "Token",
+            "description": "<p>The authorization token</p> "
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>removed user</p> "
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "api/v1/users/index.js",
+    "groupTitle": "User",
+    "error": {
+      "fields": {
+        "400": [
+          {
+            "group": "400",
+            "optional": false,
+            "field": "Bad",
+            "description": "<p>Request Error: Either malformed or missing                    parameters</p> "
+          }
+        ],
+        "401": [
+          {
+            "group": "401",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Token Error: Missing, invalid or                    expired token passed</p> "
+          },
+          {
+            "group": "401",
+            "optional": false,
+            "field": "Unauthorized",
+            "description": "<p>: You are not authorized to access this                 resource</p> "
+          }
+        ],
+        "404": [
+          {
+            "group": "404",
+            "optional": false,
+            "field": "User",
+            "description": "<p>Not Found</p> "
+          }
+        ],
+        "500": [
+          {
+            "group": "500",
+            "optional": false,
+            "field": "Internal",
+            "description": "<p>Server Error</p> "
+          }
+        ]
+      }
+    }
   },
   {
     "type": "get",
@@ -327,6 +759,19 @@
     "title": "Lookup User",
     "name": "GetUser",
     "group": "User",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "Token",
+            "description": "<p>The authorization token</p> "
+          }
+        ]
+      }
+    },
     "success": {
       "fields": {
         "200": [
@@ -354,62 +799,51 @@
         ]
       }
     },
+    "version": "0.0.0",
+    "filename": "api/v1/users/index.js",
+    "groupTitle": "User",
     "error": {
       "fields": {
         "400": [
           {
             "group": "400",
-            "type": "String",
             "optional": false,
-            "field": "message",
-            "description": "<p>bad request (missing token probably)</p> "
+            "field": "Bad",
+            "description": "<p>Request Error: Either malformed or missing                    parameters</p> "
           }
         ],
         "401": [
           {
             "group": "401",
-            "type": "String",
             "optional": false,
-            "field": "message",
-            "description": "<p>unauthorized</p> "
+            "field": "Authorization",
+            "description": "<p>Token Error: Missing, invalid or                    expired token passed</p> "
+          },
+          {
+            "group": "401",
+            "optional": false,
+            "field": "Unauthorized",
+            "description": "<p>: You are not authorized to access this                 resource</p> "
           }
         ],
         "404": [
           {
             "group": "404",
-            "type": "String",
             "optional": false,
-            "field": "message",
-            "description": "<p>no such user</p> "
+            "field": "User",
+            "description": "<p>Not Found</p> "
           }
         ],
         "500": [
           {
             "group": "500",
-            "type": "String",
             "optional": false,
-            "field": "message",
-            "description": "<p>something went wrong</p> "
+            "field": "Internal",
+            "description": "<p>Server Error</p> "
           }
         ]
       }
-    },
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "token",
-            "description": ""
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "api/v1/users/index.js",
-    "groupTitle": "User"
+    }
   },
   {
     "type": "get",
@@ -417,42 +851,6 @@
     "title": "Get User ID by email",
     "name": "GetUserMailByID",
     "group": "User",
-    "error": {
-      "fields": {
-        "400": [
-          {
-            "group": "400",
-            "optional": false,
-            "field": "message",
-            "description": "<p>id and email do not match</p> "
-          }
-        ],
-        "401": [
-          {
-            "group": "401",
-            "optional": false,
-            "field": "message",
-            "description": "<p>unauthorized</p> "
-          }
-        ],
-        "404": [
-          {
-            "group": "404",
-            "optional": false,
-            "field": "message",
-            "description": "<p>user with email not found</p> "
-          }
-        ],
-        "500": [
-          {
-            "group": "500",
-            "optional": false,
-            "field": "message",
-            "description": "<p>error</p> "
-          }
-        ]
-      }
-    },
     "success": {
       "fields": {
         "201": [
@@ -488,9 +886,42 @@
     },
     "version": "0.0.0",
     "filename": "api/v1/users/index.js",
-    "groupTitle": "User"
+    "groupTitle": "User",
+    "error": {
+      "fields": {
+        "400": [
+          {
+            "group": "400",
+            "optional": false,
+            "field": "Bad",
+            "description": "<p>Request Error: Either malformed or missing                    parameters</p> "
+          }
+        ],
+        "404": [
+          {
+            "group": "404",
+            "optional": false,
+            "field": "User",
+            "description": "<p>Not Found</p> "
+          }
+        ],
+        "500": [
+          {
+            "group": "500",
+            "optional": false,
+            "field": "Internal",
+            "description": "<p>Server Error</p> "
+          }
+        ]
+      }
+    }
   },
   {
+    "type": "put",
+    "url": "/users/:id",
+    "title": "Update User",
+    "name": "UpdateUser",
+    "group": "User",
     "parameter": {
       "fields": {
         "Parameter": [
@@ -498,18 +929,69 @@
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "token",
-            "description": ""
+            "field": "Token",
+            "description": "<p>The authorization token</p> "
           }
         ]
       }
     },
-    "type": "",
-    "url": "",
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>successfully updated user&#39;</p> "
+          }
+        ]
+      }
+    },
     "version": "0.0.0",
     "filename": "api/v1/users/index.js",
-    "group": "_Users_cocoanaut_Documents_Development_idrop_link_idrop_link_backend_api_v1_users_index_js",
-    "groupTitle": "_Users_cocoanaut_Documents_Development_idrop_link_idrop_link_backend_api_v1_users_index_js",
-    "name": ""
+    "groupTitle": "User",
+    "error": {
+      "fields": {
+        "400": [
+          {
+            "group": "400",
+            "optional": false,
+            "field": "Bad",
+            "description": "<p>Request Error: Either malformed or missing                    parameters</p> "
+          }
+        ],
+        "401": [
+          {
+            "group": "401",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Token Error: Missing, invalid or                    expired token passed</p> "
+          },
+          {
+            "group": "401",
+            "optional": false,
+            "field": "Unauthorized",
+            "description": "<p>: You are not authorized to access this                 resource</p> "
+          }
+        ],
+        "404": [
+          {
+            "group": "404",
+            "optional": false,
+            "field": "User",
+            "description": "<p>Not Found</p> "
+          }
+        ],
+        "500": [
+          {
+            "group": "500",
+            "optional": false,
+            "field": "Internal",
+            "description": "<p>Server Error</p> "
+          }
+        ]
+      }
+    }
   }
 ]
