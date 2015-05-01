@@ -144,7 +144,7 @@
 	 * @apiError (400) email already in use
      *
      * @apiUse BadRequestError
-     * @apiUse internalServerErrorMessage
+     * @apiUse InternalServerError
      */
     app.post('/api/v1/users/', function(req, res) {
         if (req.body.email === undefined || req.body.password === undefined) {
@@ -489,7 +489,7 @@
      * @apiUse InternalServerError
      * @apiUse UserNotFoundError
      * @apiUse BadRequestError
-     * @apiUse DropNotFoundErrorr
+     * @apiUse DropNotFoundError
      */
     app.get('/api/v1/users/:userId/drops/:dropId', function(req, res) {
         executeOnAuthenticatedRequest(req, res, function(doc) {
@@ -581,8 +581,8 @@
      * @apiUse InternalServerError
      * @apiUse TokenError
      * @apiUse UnauthorizedError
-     * @apiUse UserNotFoundErro
-     * @apiUse DropNotFoundErrorr
+     * @apiUse UserNotFoundError
+     * @apiUse DropNotFoundError
      */
     app.post('/api/v1/users/:userId/drops/:dropId', function(req, res) {
         executeOnAuthenticatedRequest(req, res, function(doc) {
