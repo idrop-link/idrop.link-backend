@@ -18,6 +18,9 @@
     var TokenSchema = require('./token').TokenSchema,
         Token = require('./token').Token;
 
+    var DropSchema = require('./drop').DropSchema,
+        Drop = require('./drop').Drop;
+
     var UserSchema = new Schema({
         creation_date: {
             type: Date,
@@ -27,7 +30,8 @@
             type: String,
             required: true
         },
-        tokens: [TokenSchema]
+        tokens: [TokenSchema],
+        drops: [DropSchema]
     });
 
     UserSchema.plugin(passportLocalMongoose, {
