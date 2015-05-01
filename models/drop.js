@@ -17,7 +17,8 @@
             default: Date.now
         },
         name: String,
-        path: String
+        path: String,
+        url: String
     });
 
     var Drop = mongoose.model('Drop', DropSchema);

@@ -4,39 +4,44 @@
     var express = require('express'),
         app = module.exports = express(),
         passport = require('passport'),
-        path = require('path');
+        path = require('path'),
+        fs = require('fs');
 
-    var User = require(path.join(__dirname, '../../..', '/models/user'));
+    var STATIC_DATA_PATH = path.join(__dirname, '../../..', '/static_data'),
+        TEMP_UPLOAD_PATH = path.join(__dirname, '../../..', '/uploads');
 
-	// Reusable apidoc errors
-	// CLIENT ERRORS
-	/**
-	 * @apiDefine BadRequestError
-	 * @apiError (400) Bad Request Error: Either malformed or missing
-	 *				   parameters
-	 */
+    var User = require(path.join(__dirname, '../../..', '/models/user')),
+        Drop = require(path.join(__dirname, '../../..', '/models/drop')).Drop;
+
+    // Reusable apidoc errors
+    // CLIENT ERRORS
+    /**
+     * @apiDefine BadRequestError
+     * @apiError (400) Bad Request Error: Either malformed or missing
+     *				   parameters
+     */
     var badRequestMessage = 'Bad Request Error: Either malformed or missing ';
     badRequestMessage += 'parameters';
 
-	/**
-	 * @apiDefine TokenError
-	 * @apiError (401) Authorization Token Error: Missing, invalid or
-	 *				   expired token passed
-	 */
+    /**
+     * @apiDefine TokenError
+     * @apiError (401) Authorization Token Error: Missing, invalid or
+     *				   expired token passed
+     */
     var tokenErrorMessage = 'Authorization Token Error: Missing, invalid or ';
     tokenErrorMessage += 'expired token passed';
 
-	/**
-	 * @apiDefine UnauthorizedError
-	 * @apiError (401) Unauthorized: You are not authorized to access this
+    /**
+     * @apiDefine UnauthorizedError
+     * @apiError (401) Unauthorized: You are not authorized to access this
      *                 resource
-	 */
+     */
     var unauthorizedErrorMessage = 'Unauthorized: You are not authorized ';
     unauthorizedErrorMessage += 'to access this resource';
 
-	/**
-	 * @apiDefine UserNotFoundError
-	 * @apiError (404) User Not Found
+    /**
+     * @apiDefine UserNotFoundError
+     * @apiError (404) User Not Found
      */
     var userNotFoundErrorMessage = 'User Not Found';
 
@@ -46,11 +51,11 @@
      */
     var dropNotFoundErrorMessage = 'Drop Not Found';
 
-	// SERVER ERRORS
-	/**
-	 * @apiDefine InternalServerError
-	 * @apiError (500) Internal Server Error
-	 */
+    // SERVER ERRORS
+    /**
+     * @apiDefine InternalServerError
+     * @apiError (500) Internal Server Error
+     */
     var internalServerErrorMessage = 'Interal Server Error';
 
     /*
@@ -79,7 +84,7 @@
         if (incomingToken && incomingToken.email) {
             User.findById(req.params.userId, function(err, doc) {
                 if (err) {
-					console.log(err);
+                    console.log(err);
                     return res
                         .status(500)
                         .json({
@@ -135,12 +140,14 @@
      *
      * @apiParam {String} email unique email address
      * @apiParam {String} password the users password
+	 *
+	 * @apiError (400) email already in use
      *
      * @apiUse BadRequestError
      * @apiUse internalServerErrorMessage
      */
     app.post('/api/v1/users/', function(req, res) {
-        if (req.body.email === undefined && req.body.password === undefined) {
+        if (req.body.email === undefined || req.body.password === undefined) {
             return res
                 .status(400)
                 .json({
@@ -148,22 +155,34 @@
                 });
         }
 
-        User.register(new User({
-            email: req.body.email,
-            password: req.body.password
-        }), req.body.password, function(err, doc) {
-            if (err) {
-                console.error(err);
+        User.findOne({
+            email: req.body.email
+        }, function(err, doc) {
+            if (doc) {
                 return res
-                    .status(500)
-                    .json(internalServerErrorMessage);
-            } else {
-                return res
-                    .status(201)
+                    .status(400)
                     .json({
-                        message: 'registered user',
-                        _id: doc._id
+                        message: 'email already in use'
                     });
+            } else {
+                User.register(new User({
+                    email: req.body.email,
+                    password: req.body.password
+                }), req.body.password, function(err, doc) {
+                    if (err) {
+                        console.error(err);
+                        return res
+                            .status(500)
+                            .json(internalServerErrorMessage);
+                    } else {
+                        return res
+                            .status(201)
+                            .json({
+                                message: 'registered user',
+                                _id: doc._id
+                            });
+                    }
+                });
             }
         });
     });
@@ -186,6 +205,24 @@
      */
     app.put('/api/v1/users/:userId', function(req, res) {
         // TODO
+        executeOnAuthenticatedRequest(req, res, function(doc) {
+            doc.update(req.body, function(err, doc) {
+                if (err) {
+                    console.error(err);
+                    return res
+                        .status(500)
+                        .json({
+                            message: internalServerErrorMessage
+                        });
+                }
+
+                return res
+                    .status(200)
+                    .json({
+                        message: 'successfully updated user'
+                    });
+            });
+        });
     });
 
     /**
@@ -293,7 +330,7 @@
                 }
 
                 return res
-                    .status(201)
+                    .status(200)
                     .json({
                         _id: doc._id
                     });
@@ -373,7 +410,7 @@
                     }
 
                     return res
-                        .status(200)
+                        .status(201)
                         .json({
                             token: token
                         });
@@ -455,11 +492,77 @@
      * @apiUse DropNotFoundErrorr
      */
     app.get('/api/v1/users/:userId/drops/:dropId', function(req, res) {
-        // TODO
+        executeOnAuthenticatedRequest(req, res, function(doc) {
+            var drop = doc.drops.id(req.params.dropId);
+
+            if (!drop) {
+                return res
+                    .status(404)
+                    .json({
+                        message: dropNotFoundErrorMessage
+                    });
+            }
+
+            return res
+                .status(200)
+                .json({
+                    _id: drop._id,
+                    name: drop.name,
+                    url: drop.url
+                });
+        });
     });
 
     /**
-     * @api {post} /users/:id/drops/:id Create new drop of a User
+     *  @api {post} /users/:userId/drops' Initialize drop transaction
+     *
+     * @apiName InitializeDrop
+     * @apiGroup Drop
+     * @apiDescription First step of drop upload: register coming drop and receive
+     *                 eventual URL for the drop to be accessed.
+     *
+     * @apiParam {String} Token The authorization token
+     *
+     * @apiSuccess (200) _id the drop id
+     * @apiSuccess (200) name the original file name
+     * @apiSuccess (200) url the file url
+     *
+     * @apiUse TokenError
+     * @apiUse UnauthorizedError
+     * @apiUse InternalServerError
+     * @apiUse UserNotFoundError
+     * @apiUse BadRequestError
+     */
+    app.post('/api/v1/users/:userId/drops', function(req, res) {
+        executeOnAuthenticatedRequest(req, res, function(doc) {
+            var drop = doc.drops.create({});
+            doc.drops.push(drop);
+
+            drop.url = 'BASE_URL/' + drop.shortId;
+
+            doc.save(function(err) {
+                if (err) {
+                    console.error(err);
+                    return res
+                        .status(500)
+                        .json({
+                            message: internalServerErrorMessage
+                        });
+                } else {
+                    return res
+                        .status(201)
+                        .json({
+                            _id: drop._id,
+                            url: drop.url,
+                            name: drop.name
+                        });
+                }
+            });
+        });
+    });
+
+    /**
+     * @api {post} /users/:id/drops/:id Upload file to initialized drop
      *
      * @apiGroup Drop
      * @apiName UploadDrop
@@ -482,7 +585,76 @@
      * @apiUse DropNotFoundErrorr
      */
     app.post('/api/v1/users/:userId/drops/:dropId', function(req, res) {
-        // TODO
+        executeOnAuthenticatedRequest(req, res, function(doc) {
+            var drop = doc.drops.id(req.params.dropId);
+
+            // the drop needs to be registered first
+            if (!drop) {
+                return res
+                    .status(400)
+                    .json({
+                        message: 'Uninitialized drop'
+                    });
+            }
+
+            // the drop was sent with wrong field name or none at all
+            if (!req.files.data || !req.files.data.path) {
+                return res
+                    .status(400)
+                    .json({
+                        message: badRequestMessage
+                    });
+            }
+
+            if (drop.name !== undefined) {
+                return res
+                    .status(409)
+                    .json({
+                        message: 'Conflict: Drop already uploaded'
+                    });
+            }
+
+            // move drop to final destination
+            var targetDir = path.join(STATIC_DATA_PATH, '/' + doc._id),
+                targetPath = path.join(targetDir, '/' + req.files.data.name.split('.').pop()),
+                tempPath = path.join(__dirname, '../../..', req.files.data.path);
+
+            if (!fs.existsSync(targetDir))
+                fs.mkdirSync(targetDir);
+
+            // set file name
+            drop.name = req.files.data.originalname;
+            drop.path = targetPath;
+
+            // move file to destination
+            fs.rename(tempPath, targetPath, function(err) {
+                if (err) {
+                    console.error(err);
+                    return res
+                        .status(500)
+                        .json({
+                            message: internalServerErrorMessage
+                        });
+                }
+
+                doc.save(function(err, doc) {
+                    if (err) {
+                        console.error(err);
+                        return res
+                            .status(500)
+                            .json({
+                                message: internalServerErrorMessage
+                            });
+                    }
+
+                    return res
+                        .status(200)
+                        .json({
+                            message: 'success'
+                        });
+                });
+            });
+        });
     });
 
     /**
@@ -503,6 +675,42 @@
      * @apiUse UserNotFoundError
      */
     app.delete('/api/v1/users/:userId/drops/:dropId', function(req, res) {
-        // TODO
+        executeOnAuthenticatedRequest(req, res, function(doc) {
+            var drop = doc.drops.id(req.params.dropId);
+
+            if (!drop) {
+                return res
+                    .status(404)
+                    .json({
+                        message: dropNotFoundErrorMessage
+                    });
+            }
+
+            // delete the physical file and then the mongodb document
+            fs.unlink(drop.path, function(err) {
+                if (err) {
+                    console.error('Unable to delete file: ' + drop.path + '\n');
+                }
+
+                drop.remove();
+
+                doc.save(function(err) {
+                    if (err) {
+                        console.error(err);
+                        return res
+                            .status(500)
+                            .json({
+                                message: internalServerErrorMessage
+                            });
+                    } else {
+                        return res
+                            .status(200)
+                            .json({
+                                message: 'success'
+                            });
+                    }
+                });
+            });
+        });
     });
 })();

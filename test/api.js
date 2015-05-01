@@ -16,6 +16,7 @@
 
     var token = null;
     var userId = null;
+    var dropId = null;
 
     describe('Create User: POST /users', function() {
         it('should not create a user', function(done) {
@@ -64,6 +65,8 @@
                     if (err) done(err);
                     else {
                         userId = res.body._id;
+
+						expect(userId).not.to.equal(null);
                         done();
                     }
                 });
@@ -81,12 +84,7 @@
                 .send(testUser)
                 .end(function(err, res) {
                     if (err) done(err);
-
-                    if (res.body.name == 'BadRequestError') {
-                        done();
-                    } else {
-                        done(new Error('Two users with the same email are not supposed to exist!'));
-                    }
+					else done();
                 });
         });
     });
@@ -147,7 +145,7 @@
         it('should return token', function(done) {
             request(app)
                 .post('/api/v1/users/' + userId + '/authenticate')
-                .expect(200)
+                .expect(201)
                 .send(testUser)
                 .end(function(err, res) {
                     if (err) done(err);
@@ -162,49 +160,49 @@
                 });
         });
     });
+    /*
+        describe('POST: /users/:id/deauthenticate', function() {
+            it('should invalidate tokens', function(done) {
+                request(app)
+                    .post('/api/v1/users/' + userId + '/deauthenticate')
+                    .expect(200)
+                    .set('Authorization', token)
+                    .end(function(err, res) {
+                        if (err) done(err);
+                        else done();
+                    });
+            });
 
-    describe('POST: /users/:id/deauthenticate', function() {
-        it('should invalidate tokens', function(done) {
-            request(app)
-                .post('/api/v1/users/' + userId + '/deauthenticate')
-                .expect(200)
-                .set('Authorization', token)
-                .end(function(err, res) {
-                    if (err) done(err);
-                    else done();
-                });
+            it('should reject authed request with invalid token', function(done) {
+                request(app)
+                    .get('/api/v1/users/' + userId)
+                    .expect(401)
+                    .set('Authorization', token)
+                    .end(function(err, res) {
+                        if (err) done(err);
+                        else done();
+                    });
+            });
+
+            it('should return token', function(done) {
+                request(app)
+                    .post('/api/v1/users/' + userId + '/authenticate')
+                    .expect(200)
+                    .send(testUser)
+                    .end(function(err, res) {
+                        if (err) done(err);
+                        else {
+                            var tok = res.body.token;
+
+                            expect(tok).not.to.equal(null);
+                            token = tok;
+
+                            done();
+                        }
+                    });
+            });
         });
-
-        it('should reject authed request with invalid token', function(done) {
-            request(app)
-                .get('/api/v1/users/' + userId)
-                .expect(401)
-                .set('Authorization', token)
-                .end(function(err, res) {
-                    if (err) done(err);
-                    else done();
-                });
-        });
-
-        it('should return token', function(done) {
-            request(app)
-                .post('/api/v1/users/' + userId + '/authenticate')
-                .expect(200)
-                .send(testUser)
-                .end(function(err, res) {
-                    if (err) done(err);
-                    else {
-                        var tok = res.body.token;
-
-                        expect(tok).not.to.equal(null);
-                        token = tok;
-
-                        done();
-                    }
-                });
-        });
-    });
-
+    */
     // FIXME: get profiles of other users (email not matching)
     describe('GET /users/:id', function() {
         it('should return unauthorized warning', function(done) {
@@ -223,6 +221,143 @@
                 .expect(200)
                 .set('Authorization', token)
                 .end(function(err, res) {
+                    if (err) done(err);
+                    else done();
+                });
+        });
+    });
+
+    // TODO: PUT User
+
+    // Drops
+    describe('POST /users/:id/drops', function() {
+		it('should return unauthorized warning', function(done) {
+            request(app)
+                .post('/api/v1/users/' + userId + '/drops/')
+                .expect(401)
+                .end(function(err, res) {
+                    if (err) done(err);
+                    else done();
+                });
+        });
+
+        it('should initialize drop', function(done) {
+            request(app)
+                .post('/api/v1/users/' + userId + '/drops')
+                .expect(201)
+                .set('Authorization', token)
+                .end(function(err, res) {
+                    if (err) done(err);
+                    else {
+                        dropId = res.body._id;
+                        expect(dropId).not.to.equal(null);
+                        done();
+                    }
+                });
+        });
+    });
+
+    describe('POST /users/:id/drops(:id)', function() {
+		it('should return unauthorized warning', function(done) {
+            request(app)
+                .post('/api/v1/users/' + userId + '/drops/' + dropId)
+                .expect(401)
+                .end(function(err, res) {
+                    if (err) done(err);
+                    else done();
+                });
+        });
+
+		it('should reject request without file', function(done) {
+            request(app)
+                .post('/api/v1/users/' + userId + '/drops/' + dropId)
+                .set('Authorization', token)
+                .expect(400)
+                .end(function(err, res) {
+                    if (err) done(err);
+                    else done();
+                });
+        });
+
+        it('should upload file to drop', function(done) {
+            request(app)
+                .post('/api/v1/users/' + userId + '/drops/' + dropId)
+                .set('Authorization', token)
+				.attach('data', 'index.js')
+                .expect(200)
+                .end(function(err, res) {
+                    if (err) done(err);
+                    else done();
+                });
+        });
+
+        it('should reject already uploaded drop id', function(done) {
+            request(app)
+                .post('/api/v1/users/' + userId + '/drops/' + dropId)
+                .set('Authorization', token)
+				.attach('data', 'index.js')
+                .expect(409)
+                .end(function(err, res) {
+                    if (err) done(err);
+                    else done();
+                });
+        });
+    });
+
+    describe('GET /users/:id/drops/:id', function() {
+		it('should return unauthorized warning', function(done) {
+            request(app)
+                .get('/api/v1/users/' + userId + '/drops/' + dropId)
+                .expect(401)
+                .end(function(err, res) {
+                    if (err) done(err);
+                    else done();
+                });
+        });
+
+        it('should return drop', function(done) {
+            request(app)
+                .get('/api/v1/users/' + userId + '/drops/' + dropId)
+                .set('Authorization', token)
+                .expect(200)
+                .end(function(err, res) {
+                    if (err) done(err);
+                    else {
+                        expect(res.body._id).to.equal(dropId);
+                        done();
+                    }
+                });
+        });
+    });
+
+    describe('DELETE /users/:id/drops/:id', function() {
+		it('should return unauthorized warning', function(done) {
+            request(app)
+                .delete('/api/v1/users/' + userId + '/drops/' + dropId)
+                .expect(401)
+                .end(function(err, res) {
+                    if (err) done(err);
+                    else done();
+                });
+        });
+
+        it('should delete drop', function(done) {
+            request(app)
+                .delete('/api/v1/users/' + userId + '/drops/' + dropId)
+                .set('Authorization', token)
+                .expect(200)
+                .end(function(err) {
+                    if (err) done(err);
+                    else done();
+                });
+        });
+
+        it('should not find deleted drop', function() {
+            request(app)
+                .get('/api/v1/users/' + userId + '/drops/' + dropId)
+                .set('Authorization', token)
+                .expect(404)
+                .end(function(err) {
                     if (err) done(err);
                     else done();
                 });

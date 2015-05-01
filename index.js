@@ -5,6 +5,7 @@
     var app = exports.app = express();
 
     var bodyParser = require('body-parser'),
+        multer = require('multer'),
         morgan = require('morgan');
 
     var passport = require('passport'),
@@ -21,8 +22,13 @@
 
     app.use(morgan('combined'));
 
-    app.use(bodyParser.urlencoded({extended: false}));
+    app.use(bodyParser.urlencoded({
+        extended: false
+    }));
     app.use(bodyParser.json());
+    app.use(multer({
+        dest: './uploads/'
+    }));
 
     /* set up passport strategy */
     passport.use(User.createStrategy());
