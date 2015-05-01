@@ -8,12 +8,68 @@
 
     var User = require(path.join(__dirname, '../../..', '/models/user'));
 
+	// Reusable apidoc errors
+	// CLIENT ERRORS
+	/**
+	 * @apiDefine BadRequestError
+	 * @apiError (400) Bad Request Error: Either malformed or missing
+	 *				   parameters
+	 */
+    var badRequestMessage = 'Bad Request Error: Either malformed or missing ';
+    badRequestMessage += 'parameters';
+
+	/**
+	 * @apiDefine TokenError
+	 * @apiError (401) Authorization Token Error: Missing, invalid or
+	 *				   expired token passed
+	 */
+    var tokenErrorMessage = 'Authorization Token Error: Missing, invalid or ';
+    tokenErrorMessage += 'expired token passed';
+
+	/**
+	 * @apiDefine UnauthorizedError
+	 * @apiError (401) Unauthorized: You are not authorized to access this
+     *                 resource
+	 */
+    var unauthorizedErrorMessage = 'Unauthorized: You are not authorized ';
+    unauthorizedErrorMessage += 'to access this resource';
+
+	/**
+	 * @apiDefine UserNotFoundError
+	 * @apiError (404) User Not Found
+     */
+    var userNotFoundErrorMessage = 'User Not Found';
+
+    /**
+     * @apiDefine DropNotFoundError
+     * @apiError (404) Drop Not Found
+     */
+    var dropNotFoundErrorMessage = 'Drop Not Found';
+
+	// SERVER ERRORS
+	/**
+	 * @apiDefine InternalServerError
+	 * @apiError (500) Internal Server Error
+	 */
+    var internalServerErrorMessage = 'Interal Server Error';
+
+    /*
+     * When using this function, use the following apidoc calls:
+     *
+     * @apiParam {String} Token The authorization token
+     *
+     * @apiUse TokenError
+     * @apiUse UnauthorizedError
+     * @apiUse InternalServerError
+     * @apiUse UserNotFoundError
+     * @apiUse BadRequestError
+     */
     function executeOnAuthenticatedRequest(req, res, callback) {
         if (!req.headers.authorization) {
             return res
                 .status(401)
                 .json({
-                    message: 'token missing'
+                    message: tokenErrorMessage
                 });
         }
 
@@ -23,23 +79,26 @@
         if (incomingToken && incomingToken.email) {
             User.findById(req.params.userId, function(err, doc) {
                 if (err) {
+					console.log(err);
                     return res
                         .status(500)
-                        .json(err);
+                        .json({
+                            message: internalServerErrorMessage
+                        });
                 }
 
                 if (!doc) {
                     return res
                         .status(404)
                         .json({
-                            message: 'no such user'
+                            message: userNotFoundErrorMessage
                         });
                 } else {
                     if (doc.email !== incomingToken.email) {
                         return res
                             .status(401)
                             .json({
-                                message: 'unauthorized'
+                                message: unauthorizedErrorMessage
                             });
                     } else {
                         if (doc.validateToken(req.headers.authorization)) {
@@ -50,7 +109,7 @@
                             return res
                                 .status(401)
                                 .json({
-                                    message: 'token expired or invalid'
+                                    message: tokenErrorMessage
                                 });
                         }
                     }
@@ -60,7 +119,7 @@
             return res
                 .status(400)
                 .json({
-                    message: 'bad request'
+                    message: badRequestMessage
                 });
         }
     }
@@ -74,17 +133,18 @@
      *
      * @apiSuccess (201) {String} _id the users id
      *
-     * @apiError (400) {String} message contains the error description
-     *
      * @apiParam {String} email unique email address
      * @apiParam {String} password the users password
+     *
+     * @apiUse BadRequestError
+     * @apiUse internalServerErrorMessage
      */
     app.post('/api/v1/users/', function(req, res) {
         if (req.body.email === undefined && req.body.password === undefined) {
             return res
                 .status(400)
                 .json({
-                    message: 'missing parameters'
+                    message: badRequestMessage
                 });
         }
 
@@ -93,9 +153,10 @@
             password: req.body.password
         }), req.body.password, function(err, doc) {
             if (err) {
+                console.error(err);
                 return res
-                    .status(400)
-                    .json(err);
+                    .status(500)
+                    .json(internalServerErrorMessage);
             } else {
                 return res
                     .status(201)
@@ -108,7 +169,20 @@
     });
 
     /**
-     * Update User
+     * @api {put} /users/:id Update User
+     *
+     * @apiName UpdateUser
+     * @apiGroup User
+     *
+     * @apiParam {String} Token The authorization token
+     *
+     * @apiSuccess (200) {String} message successfully updated user'
+     *
+     * @apiUse TokenError
+     * @apiUse UnauthorizedError
+     * @apiUse InternalServerError
+     * @apiUse UserNotFoundError
+     * @apiUse BadRequestError
      */
     app.put('/api/v1/users/:userId', function(req, res) {
         // TODO
@@ -120,16 +194,17 @@
      * @apiName GetUser
      * @apiGroup User
      *
+     * @apiParam {String} Token The authorization token
+     *
      * @apiSuccess (200) {String} _id id of the user
      * @apiSuccess (200) {String} email of the user
      * @apiSuccess (200) {String} creation_date when the user was created
      *
-     * @apiError (500) {String} message something went wrong
-     * @apiError (404) {String} message no such user
-     * @apiError (401) {String} message unauthorized
-     * @apiError (400) {String} message bad request (missing token probably)
-	 *
-     * @apiParam {String} token
+     * @apiUse TokenError
+     * @apiUse UnauthorizedError
+     * @apiUse InternalServerError
+     * @apiUse UserNotFoundError
+     * @apiUse BadRequestError
      */
     app.get('/api/v1/users/:userId', function(req, res) {
         executeOnAuthenticatedRequest(req, res, function(doc) {
@@ -149,22 +224,24 @@
      * @apiName DeleteUser
      * @apiGroup User
      *
-     * @apiError (500) message error while removing user
-     * @apiError (404) message user with id not found
-     * @apiError (401) message unauthorized
-     * @apiError (400) message id and email do not match
+     * @apiParam {String} Token The authorization token
      *
-     * @apiSuccess (200) message removed user
-	 *
-     * @apiParam {String} token
+     * @apiSuccess (200) {String} message removed user
+     *
+     * @apiUse TokenError
+     * @apiUse UnauthorizedError
+     * @apiUse InternalServerError
+     * @apiUse UserNotFoundError
+     * @apiUse BadRequestError
      */
     app.delete('/api/v1/users/:userId', function(req, res) {
         executeOnAuthenticatedRequest(req, res, function(doc) {
             doc.remove(function(err, doc) {
                 if (err) {
+                    console.error(err);
                     return res
                         .status(500)
-                        .json(err);
+                        .json(internalServerErrorMessage);
                 } else {
                     return res
                         .status(200)
@@ -176,22 +253,21 @@
         });
     });
 
-	/**
-	 * @api {get} /users/:email/idformail Get User ID by email
-	 *
-	 * @apiName GetUserMailByID
-	 * @apiGroup User
-	 *
-     * @apiError (500) message error
-     * @apiError (404) message user with email not found
-     * @apiError (401) message unauthorized
-     * @apiError (400) message id and email do not match
-	 *
+    /**
+     * @api {get} /users/:email/idformail Get User ID by email
+     *
+     * @apiName GetUserMailByID
+     * @apiGroup User
+     *
      * @apiSuccess (201) {String} _id the users id
-	 *
+     *
      * @apiParam {String} email unique email address
      * @apiParam {String} password the users password
-	*/
+     *
+     * @apiUse UserNotFoundError
+     * @apiUse BadRequestError
+     * @apiUse InternalServerError
+     */
     app.get('/api/v1/users/:email/idformail', passport.authenticate('local', {
         session: false
     }), function(req, res) {
@@ -200,10 +276,11 @@
                 email: req.params.email
             }, function(err, doc) {
                 if (err) {
+                    console.error(err);
                     return res
                         .status(500)
                         .json({
-                            message: err
+                            message: internalServerErrorMessage
                         });
                 }
 
@@ -211,12 +288,12 @@
                     return res
                         .status(404)
                         .json({
-                            message: 'no such user'
+                            message: userNotFoundErrorMessage
                         });
                 }
 
                 return res
-                    .status(200)
+                    .status(201)
                     .json({
                         _id: doc._id
                     });
@@ -225,7 +302,7 @@
             return res
                 .status(400)
                 .json({
-                    message: 'bad request'
+                    message: badRequestMessage
                 });
         }
     });
@@ -246,6 +323,11 @@
      *
      * @apiParam {String} email unique email address
      * @apiParam {String} password the users password
+     *
+     * @apiUse InternalServerError
+     * @apiUse UserNotFoundError
+     * @apiUse UnauthorizedError
+     * @apiUse BadRequestError
      */
     app.post('/api/v1/users/:userId/authenticate', passport.authenticate('local', {
         session: false
@@ -253,10 +335,11 @@
         if (req.user) {
             User.findById(req.params.userId, function(err, doc) {
                 if (err) {
+                    console.error(err);
                     return res
                         .status(500)
                         .json({
-                            message: err
+                            message: internalServerErrorMessage
                         });
                 }
 
@@ -264,7 +347,7 @@
                     return res
                         .status(404)
                         .json({
-                            message: 'no such user'
+                            message: userNotFoundErrorMessage
                         });
                 }
 
@@ -272,7 +355,7 @@
                     return res
                         .status(401)
                         .json({
-                            message: 'unauthorized'
+                            message: unauthorizedErrorMessage
                         });
                 }
 
@@ -281,10 +364,11 @@
 
                 doc.save(function(err, doc) {
                     if (err) {
+                        console.log(err);
                         return res
                             .status(500)
                             .json({
-                                message: err
+                                message: internalServerErrorMessage
                             });
                     }
 
@@ -299,7 +383,7 @@
             return res
                 .status(400)
                 .json({
-                    message: 'bad request'
+                    message: badRequestMessage
                 });
         }
     });
@@ -310,22 +394,27 @@
      * @apiName DeauthenticateUser
      * @apiGroup User
      *
-     * @apiError (500) message error while generating token
-     * @apiError (404) message no such user
-     * @apiError (401) message unauthorized
-     * @apiError (400) message bad request
+     * @apiParam {String} Token The authorization token
      *
-     * @apiSuccess (200) token the requested token
+     * @apiSuccess (200) message success
      *
+     * @apiUse TokenError
+     * @apiUse UnauthorizedError
+     * @apiUse InternalServerError
+     * @apiUse UserNotFoundError
+     * @apiUse BadRequestError
      */
     app.post('/api/v1/users/:userId/deauthenticate', function(req, res) {
         executeOnAuthenticatedRequest(req, res, function(doc) {
+            // TODO: deauthentication
+
             doc.save(function(err, doc) {
                 if (err) {
+                    console.error(err);
                     return res
                         .status(500)
                         .json({
-                            message: err
+                            message: internalServerErrorMessage
                         });
                 }
 
@@ -347,21 +436,71 @@
     });
 
     /**
-     * Get details for a drop of a User
+     * @api {get} /users/:id/drops/:id Get details for a drop of a User
+     *
+     * @apiName GetDrop
+     * @apiGroup Drop
+     *
+     * @apiParam {String} Token The authorization token
+     *
+     * @apiSuccess (200) _id the drop id
+     * @apiSuccess (200) name the original file name
+     * @apiSuccess (200) url the file url
+     *
+     * @apiUse TokenError
+     * @apiUse UnauthorizedError
+     * @apiUse InternalServerError
+     * @apiUse UserNotFoundError
+     * @apiUse BadRequestError
+     * @apiUse DropNotFoundErrorr
      */
     app.get('/api/v1/users/:userId/drops/:dropId', function(req, res) {
         // TODO
     });
 
     /**
-     * Create new drop of a User
+     * @api {post} /users/:id/drops/:id Create new drop of a User
+     *
+     * @apiGroup Drop
+     * @apiName UploadDrop
+     * @apiDescription Eventual upload of the drop. See
+     *                 InitializeDrop for the first step.
+     *
+     * @apiParam {String} Token The authorization token
+     * @apiParam {File} data the file to be uploaded
+     *
+     * @apiSuccess (200) message success
+     *
+     * @apiError (400) Uninitialized drop
+     * @apiError (409) Conflict: Drop already uploaded
+     *
+     * @apiUse BadRequestError
+     * @apiUse InternalServerError
+     * @apiUse TokenError
+     * @apiUse UnauthorizedError
+     * @apiUse UserNotFoundErro
+     * @apiUse DropNotFoundErrorr
      */
     app.post('/api/v1/users/:userId/drops/:dropId', function(req, res) {
         // TODO
     });
 
     /**
-     * Delete drop of a User
+     * @api {delete} /users/:id/drops/:id Delete drop of a User
+     *
+     * @apiName DeleteDrop
+     * @apiGroup Drop
+     * @apiDescription Delete the drop
+     *
+     * @apiParam {String} Token The authorization token
+     *
+     * @apiSuccess (200) {String} message success
+     *
+     * @apiUse BadRequestError
+     * @apiUse InternalServerError
+     * @apiUse TokenError
+     * @apiUse UnauthorizedError
+     * @apiUse UserNotFoundError
      */
     app.delete('/api/v1/users/:userId/drops/:dropId', function(req, res) {
         // TODO
