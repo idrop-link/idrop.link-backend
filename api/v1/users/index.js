@@ -13,6 +13,12 @@
     var User = require(path.join(__dirname, '../../..', '/models/user')),
         Drop = require(path.join(__dirname, '../../..', '/models/drop')).Drop;
 
+    if (!fs.existsSync(STATIC_DATA_PATH))
+        fs.mkdirSync(STATIC_DATA_PATH)
+
+    if (!fs.existsSync(TEMP_UPLOAD_PATH))
+        fs.mkdirSync(TEMP_UPLOAD_PATH)
+
     // Reusable apidoc errors
     // CLIENT ERRORS
     /**
