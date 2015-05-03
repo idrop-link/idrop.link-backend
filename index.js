@@ -11,7 +11,8 @@
     var passport = require('passport'),
         User = require('./models/user');
 
-    var api = require('./api');
+    var api = require('./api'),
+        frontend = require('./frontend');
 
     /* set up CORS header */
     app.use(function(req, res, next) {
@@ -34,6 +35,7 @@
     passport.use(User.createStrategy());
 
     app.use(api);
+    app.use(frontend);
 
     /* serve documentation as static content */
     app.use('/doc', express.static(__dirname + '/doc'));
