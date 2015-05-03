@@ -107,13 +107,25 @@ body.drop nav h1 {
 
 .drop-wrap .drop {
     -webkit-box-shadow: 0px 5px 5px 0px rgba(50, 50, 50, 0.75);
--moz-box-shadow:    0px 5px 5px 0px rgba(50, 50, 50, 0.75);
-box-shadow:         0px 5px 5px 0px rgba(50, 50, 50, 0.75);
+    -moz-box-shadow:    0px 5px 5px 0px rgba(50, 50, 50, 0.75);
+    box-shadow:         0px 5px 5px 0px rgba(50, 50, 50, 0.75);
     display: inline-block;
     padding: 10px 10px 30px 10px;
     background: #fefefe;
     border: 1px solid #eee;
     border-radius: 4px; }
+
+.drop-wrap button {
+    cursor: pointer;
+    display: inline-block;
+    background-color: #333;
+    color: #eee;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    padding: 8px 15px; }
+
+.drop-wrap button:hover {
+    background-color: #555 !important; }
 
 .drop-wrap img {
     display: inline-block; }

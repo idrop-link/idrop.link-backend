@@ -54,8 +54,13 @@
                 if (!doc)
                     return next();
 
+                var isImage = (doc.drops[0].type == "jpg"
+                    || doc.drops[0].type == "png"
+                    || doc.drops[0].type == "gif") ? true : false;
+
                 res.render('drop', {
-                    img: doc.drops[0].path,
+                    path: doc.drops[0].path,
+                    is_image: isImage,
                     site: 'drop',
                     title: doc.drops[0].name
                 });
