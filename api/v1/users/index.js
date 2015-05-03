@@ -7,14 +7,15 @@
         path = require('path'),
         fs = require('fs');
 
-    var STATIC_DATA_PATH = path.join(__dirname, '../../..', '/static_data'),
+    var STATIC_DATA_PATH = path.join('/static_data'),
+        STATIC_DATA_PATH_ABS = path.join(__dirname, '../../..', STATIC_DATA_PATH),
         TEMP_UPLOAD_PATH = path.join(__dirname, '../../..', '/uploads');
 
     var User = require(path.join(__dirname, '../../..', '/models/user')),
         Drop = require(path.join(__dirname, '../../..', '/models/drop')).Drop;
 
-    if (!fs.existsSync(STATIC_DATA_PATH))
-        fs.mkdirSync(STATIC_DATA_PATH);
+    if (!fs.existsSync(STATIC_DATA_PATH_ABS))
+        fs.mkdirSync(STATIC_DATA_PATH_ABS);
 
     if (!fs.existsSync(TEMP_UPLOAD_PATH))
         fs.mkdirSync(TEMP_UPLOAD_PATH);
@@ -544,7 +545,7 @@
             var drop = doc.drops.create({});
             doc.drops.push(drop);
 
-            drop.url = 'BASE_URL/' + drop.shortId;
+            drop.url = 'http://idrop.link/d/' + drop.shortId;
 
             doc.save(function(err) {
                 if (err) {
@@ -621,19 +622,30 @@
             }
 
             // move drop to final destination
+            var fileEnding = req.files.data.name.split('.').pop(),
+                fileName = req.files.data.path.split('/').pop();
+
+            console.log(fileName);
+
             var targetDir = path.join(STATIC_DATA_PATH, '/' + doc._id),
-                targetPath = path.join(targetDir, '/' + req.files.data.name.split('.').pop()),
+                targetDirAbs = path.join(STATIC_DATA_PATH_ABS, '/' + doc._id),
+                targetPath = path.join(targetDir, '/' + fileName),
+                targetPathAbs = path.join(targetDirAbs, '/' + fileName),
                 tempPath = path.join(__dirname, '../../..', req.files.data.path);
 
-            if (!fs.existsSync(targetDir))
-                fs.mkdirSync(targetDir);
+            console.log(targetDirAbs);
+            console.log(targetPathAbs);
+
+            if (!fs.existsSync(targetDirAbs))
+                fs.mkdirSync(targetDirAbs);
 
             // set file name
             drop.name = req.files.data.originalname;
             drop.path = targetPath;
+            drop.type = fileEnding;
 
             // move file to destination
-            fs.rename(tempPath, targetPath, function(err) {
+            fs.rename(tempPath, targetPathAbs, function(err) {
                 if (err) {
                     console.error(err);
                     return res

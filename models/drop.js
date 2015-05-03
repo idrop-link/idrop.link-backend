@@ -18,7 +18,8 @@
         },
         name: String,
         path: String,
-        url: String
+        url: String,
+        type: String
     });
 
     var Drop = mongoose.model('Drop', DropSchema);

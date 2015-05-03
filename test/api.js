@@ -352,7 +352,7 @@
                 });
         });
 
-        it('should not find deleted drop', function() {
+        it('should not find deleted drop', function(done) {
             request(app)
                 .get('/api/v1/users/' + userId + '/drops/' + dropId)
                 .set('Authorization', token)
