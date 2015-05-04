@@ -45,6 +45,13 @@
         });
     });
 
+    app.get('/signup', function(req, res, next) {
+        res.render('signup', {
+            title: 'idrop.link - signup',
+            site: 'signup'
+        });
+    });
+
     app.get('/d/:shortId', function(req, res, next) {
         User.findOne({'drops.shortId': req.params.shortId},
             {'drops.$': 1}, function(err, doc) {
