@@ -304,6 +304,30 @@
         });
     });
 
+    describe('GET /users/:id/drops', function() {
+        it('should return list of drops', function(done) {
+            request(app)
+                .get('/api/v1/users/' + userId + '/drops')
+                .set('Authorization', token)
+                .expect(200)
+                .end(function(err, res) {
+                    if (err) done(err);
+                    else {
+                        var drop = res.body.drops[0];
+
+                        expect(drop.url).not.to.equal(undefined);
+                        expect(drop.name).not.to.equal(undefined);
+                        expect(drop._id).not.to.equal(undefined);
+                        expect(drop.path).not.to.equal(undefined);
+                        expect(drop.type).not.to.equal(undefined);
+                        expect(drop.shortId).not.to.equal(undefined);
+
+                        done();
+                    }
+                });
+        });
+    });
+
     describe('GET /users/:id/drops/:id', function() {
 		it('should return unauthorized warning', function(done) {
             request(app)

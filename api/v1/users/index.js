@@ -473,10 +473,31 @@
 
     // Drops
     /**
-     * List drops of a User
+     * @api {get} /users/:id/drops/ List drops of a User
+     *
+     * @apiName ListDrops
+     * @apiGroup Drop
+     *
+     * @apiParam {String} Token The authorization token
+     *
+     * @apiSuccess (200) _id the drop id
+     * @apiSuccess (200) name the original file name
+     * @apiSuccess (200) url the file url
+     *
+     * @apiUse TokenError
+     * @apiUse UnauthorizedError
+     * @apiUse InternalServerError
+     * @apiUse UserNotFoundError
+     * @apiUse BadRequestError
      */
     app.get('/api/v1/users/:userId/drops', function(req, res) {
-        // TODO
+        executeOnAuthenticatedRequest(req, res, function(doc) {
+            return res
+                .status(200)
+                .json({
+                    drops: doc.drops
+                });
+        });
     });
 
     /**
