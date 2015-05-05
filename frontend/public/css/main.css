@@ -67,6 +67,9 @@ p {
     display: inline-block;
     list-style-type: none; }
 
+.navbar-nav li.highlighted {
+    font-weight: 500; }
+
 .navbar-nav > li + li {
     margin-left: 20px; }
 
