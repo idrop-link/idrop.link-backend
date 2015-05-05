@@ -56,7 +56,7 @@
         var toast = null;
 
         if (req.query.referal == 'signup') {
-            var toast = 'Start by downloading the client for your mac below.';
+            var toast = 'Your account was successfully created. Kick off your idrop.link experience by downloading our app for your mac.';
         }
 
         res.render('welcome', {

@@ -1,13 +1,17 @@
-<h1>Welcome aboard!</h1>
+<div class="centered">
+    <h1>Welcome aboard!</h1>
 
-{{#if toast}}
-    <p class="toast">
-        {{toast}}
-    </p>
-{{/if}}
+    <div class="jumbotron">
+        <h2>Start now by downloading the client for your mac below.</h2>
 
-<div class="">
-    <a href="/download">
-        <button class="download-button">Download</button>
-    </a>
+        {{#if toast}}
+        <p class="toast">
+            {{toast}}
+        </p>
+        {{/if}}
+
+        <a href="/download">
+            <button class="download-button button">Download</button>
+        </a>
+    </div>
 </div>
