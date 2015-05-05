@@ -148,7 +148,7 @@
      * @apiParam {String} email unique email address
      * @apiParam {String} password the users password
 	 *
-	 * @apiError (400) email already in use
+	 * @apiError (400) Email already in use
      *
      * @apiUse BadRequestError
      * @apiUse InternalServerError
@@ -169,7 +169,7 @@
                 return res
                     .status(400)
                     .json({
-                        message: 'email already in use'
+                        message: 'Email already in use'
                     });
             } else {
                 User.register(new User({
