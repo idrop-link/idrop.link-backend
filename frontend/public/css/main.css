@@ -21,7 +21,8 @@ body {
 body.launch,
 body.drop,
 body.error,
-body.signup {
+body.signup,
+body.welcome {
     background-image: url('/public/img/background.jpg');
     background-size: cover;
     background-repeat: no-repeat;
@@ -139,6 +140,14 @@ body.drop nav h1 {
 
 .form-wrap .form {
     padding: 50px 100px !important; }
+
+.form-wrap .errors {
+    color: red;
+    font-size: .8em;
+    display: none; }
+
+.form-wrap .errors.active {
+    display: block !important; }
 
 .drop-wrap button,
  button.button {

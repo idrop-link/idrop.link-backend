@@ -52,6 +52,20 @@
         });
     });
 
+    app.get('/welcome', function(req, res, next) {
+        var toast = null;
+
+        if (req.query.referal == 'signup') {
+            var toast = 'Start by downloading the client for your mac below.';
+        }
+
+        res.render('welcome', {
+            toast: toast,
+            title: 'idrop.link - Welcome aboard!',
+            site: 'welcome'
+        });
+    });
+
     app.get('/d/:shortId', function(req, res, next) {
         User.findOne({'drops.shortId': req.params.shortId},
             {'drops.$': 1}, function(err, doc) {
