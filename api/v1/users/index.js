@@ -153,7 +153,7 @@
      * @apiUse BadRequestError
      * @apiUse InternalServerError
      */
-    app.post('/api/v1/users/', function(req, res) {
+    app.post('/api/v1/users', function(req, res) {
         if (req.body.email === undefined || req.body.password === undefined) {
             return res
                 .status(400)
