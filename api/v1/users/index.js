@@ -726,7 +726,7 @@
             }
 
             // delete the physical file and then the mongodb document
-            fs.unlink(drop.path, function(err) {
+            fs.unlink(path.join(__dirname, drop.path), function(err) {
                 if (err) {
                     console.error('Unable to delete file: ' + drop.path + '\n');
                 }
