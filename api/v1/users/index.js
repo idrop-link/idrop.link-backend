@@ -542,7 +542,7 @@
     });
 
     /**
-     *  @api {post} /users/:userId/drops' Initialize drop transaction
+     *  @api {post} /users/:userId/drops Initialize drop transaction
      *
      * @apiName InitializeDrop
      * @apiGroup Drop
@@ -703,7 +703,7 @@
      * @apiGroup Drop
      * @apiDescription Delete the drop
      *
-     * @apiParam {String} Token The authorization token
+     * @apiParam {String} token The authorization token
      *
      * @apiSuccess (200) {String} message success
      *
