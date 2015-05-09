@@ -137,6 +137,14 @@
     }
 
     // User
+	app.get('/api/v1/users', function(req, res) {
+		return res
+			.status(404)
+			.json({
+				message: 'Not implemented.'
+			});
+	});
+
     /**
      * @api {post} /users Create User
      *
