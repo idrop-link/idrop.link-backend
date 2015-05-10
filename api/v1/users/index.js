@@ -87,55 +87,36 @@
                 });
         }
 
-        // validate token
-        var incomingToken = User.decodeJwt(req.headers.authorization);
+        User.findById(req.params.userId, function(err, doc) {
+            if (err) {
+                console.error(err);
+                return res
+                    .status(500)
+                    .json({
+                        message: internalServerErrorMessage
+                    });
+            }
 
-        if (incomingToken && incomingToken.email) {
-            User.findById(req.params.userId, function(err, doc) {
-                if (err) {
-                    console.log(err);
-                    return res
-                        .status(500)
-                        .json({
-                            message: internalServerErrorMessage
-                        });
-                }
-
-                if (!doc) {
-                    return res
-                        .status(404)
-                        .json({
-                            message: userNotFoundErrorMessage
-                        });
+            if (!doc) {
+                return res
+                    .status(404)
+                    .json({
+                        message: userNotFoundErrorMessage
+                    });
+            } else {
+                if (doc.validateToken(req.headers.authorization)) {
+                    // start actual execution
+                    callback(doc);
                 } else {
-                    if (doc.email !== incomingToken.email) {
-                        return res
-                            .status(401)
-                            .json({
-                                message: unauthorizedErrorMessage
-                            });
-                    } else {
-                        if (doc.validateToken(req.headers.authorization)) {
-                            // start actual execution
-                            callback(doc);
-                        } else {
-                            // token expired or is invalid
-                            return res
-                                .status(401)
-                                .json({
-                                    message: tokenErrorMessage
-                                });
-                        }
-                    }
+                    // token expired or is invalid
+                    return res
+                        .status(401)
+                        .json({
+                            message: tokenErrorMessage
+                        });
                 }
-            });
-        } else {
-            return res
-                .status(400)
-                .json({
-                    message: badRequestMessage
-                });
-        }
+            }
+        });
     }
 
     // User
@@ -413,7 +394,6 @@
                         });
                 }
 
-                doc.invalidateTokens();
                 var token = doc.createToken();
 
                 doc.save(function(err, doc) {

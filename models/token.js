@@ -1,8 +1,14 @@
 (function() {
     'use strict';
 
+    var crypto = require('crypto');
+
     var mongoose = require('mongoose'),
         Schema = mongoose.Schema;
+
+    function randomSecret() {
+        return crypto.randomBytes(64).toString('hex');
+    }
 
     var TokenSchema = new Schema({
         token: {
@@ -13,7 +19,12 @@
             type: Date,
             default: Date.now
         },
-        expiration_date: Date
+        expiration_date: Date,
+        tokenSecret: {
+            type: String,
+            default: randomSecret,
+            required: true
+        }
     });
 
     /* methods */

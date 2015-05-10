@@ -13,8 +13,6 @@
         path = require('path'),
         bcrypt = require('bcrypt');
 
-    var tokenSecret = require(path.join(__dirname, '../', '/config/secrets')).tokenSecret;
-
     var TokenSchema = require('./token').TokenSchema,
         Token = require('./token').Token;
 
@@ -63,12 +61,12 @@
     });
 
     /* JWT static methods */
-    UserSchema.statics.encodeJwt = function(data) {
-        return jwt.encode(data, tokenSecret);
+    UserSchema.statics.encodeJwt = function(data, secret) {
+        return jwt.encode(data, secret);
     };
 
-    UserSchema.statics.decodeJwt = function(data) {
-        return jwt.decode(data, tokenSecret);
+    UserSchema.statics.decodeJwt = function(data, secret) {
+        return jwt.decode(data, secret);
     };
 
     /**
@@ -110,6 +108,23 @@
         }
     };
 
+    UserSchema.methods.invalidateToken = function(token) {
+        if (this.constructor.validateToken(token)) {
+            for (var i = 0; i < this.tokens.length; i++) {
+                if (this.tokens[i].token == token) {
+                    this.tokens[i].invalidate();
+                    return true;
+                }
+            }
+
+            // token not found
+            return false;
+        } else {
+            // already is invalid
+            return true;
+        }
+    };
+
     /**
      * Invalidate all tokens of the user to guarantee uniqueness of a token.
      */
@@ -120,15 +135,15 @@
     };
 
     UserSchema.methods.createToken = function() {
-        var token = this.constructor.encodeJwt({
+        var token = new Token({});
+
+        token.token = this.constructor.encodeJwt({
             email: this.email
-        });
+        }, token.tokenSecret);
 
-        this.tokens.push(new Token({
-            token: token
-        }));
+        this.tokens.push(token);
 
-        return token;
+        return token.token;
     };
 
     var User = mongoose.model('User', UserSchema);
