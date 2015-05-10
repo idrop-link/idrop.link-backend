@@ -1,7 +1,10 @@
 (function() {
     var express = require('express'),
         mongoose = require('mongoose'),
-        path = require('path');
+        path = require('path'),
+        fs = require('fs');
+
+    var config = require('./config');
 
     var app = exports.app = express();
 
@@ -22,7 +25,14 @@
         next();
     });
 
-    app.use(morgan('combined'));
+    if (config.logging.do_log) {
+        if (config.logging.access_log_path !== "") {
+            var accessLogStream = fs.createWriteStream(path.join(__dirname, config.logging.access_log_path), {flags: 'a'});
+            app.use(morgan('combined', {stream: accessLogStream}));
+        } else {
+            app.use(morgan('combined'));
+        }
+    }
 
     app.use(bodyParser.urlencoded({
         extended: false
@@ -64,5 +74,6 @@
         });
     });
 
-    app.listen(7667);
+    app.listen(config.api.port);
+    console.log('Listening at localhost:' + config.api.port);
 })();
