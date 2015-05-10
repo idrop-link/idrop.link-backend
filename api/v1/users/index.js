@@ -440,7 +440,15 @@
      */
     app.post('/api/v1/users/:userId/deauthenticate', function(req, res) {
         executeOnAuthenticatedRequest(req, res, function(doc) {
-            // TODO: deauthentication
+            var success = doc.invalidateToken(req.headers.authorization);
+
+            if (!success) {
+                return res
+                    .status(401)
+                    .json({
+                        message: unauthorizedErrorMessage
+                    });
+            }
 
             doc.save(function(err, doc) {
                 if (err) {
