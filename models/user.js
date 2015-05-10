@@ -90,22 +90,13 @@
         var validTokens = [];
 
         for (var i = 0; i < this.tokens.length; i++) {
-            if (!this.tokens[i].isExpired()) {
-                validTokens.push(this.tokens[i]);
+            if (this.tokens[i].token == token) {
+                return !this.tokens[i].isExpired();
             }
         }
 
-        // inconsistent state of tokens detected, invalidate all tokens
-        if (validTokens.length > 1) {
-            this.invalidateTokens();
-            return false;
-        } else {
-            if (validTokens[0].token == token) {
-                return true;
-            } else {
-                return false;
-            }
-        }
+        // token not found
+        return false;
     };
 
     UserSchema.methods.invalidateToken = function(token) {
