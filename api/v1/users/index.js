@@ -7,6 +7,8 @@
         path = require('path'),
         fs = require('fs');
 
+    var config = require('../../../config');
+
     var STATIC_DATA_PATH = path.join('/static_data'),
         STATIC_DATA_PATH_ABS = path.join(__dirname, '../../..', STATIC_DATA_PATH),
         TEMP_UPLOAD_PATH = path.join(__dirname, '../../..', '/uploads');
@@ -574,7 +576,7 @@
             var drop = doc.drops.create({});
             doc.drops.push(drop);
 
-            drop.url = 'http://idrop.link/d/' + drop.shortId;
+            drop.url = config.general.base_url + '/d/' + drop.shortId;
 
             doc.save(function(err) {
                 if (err) {

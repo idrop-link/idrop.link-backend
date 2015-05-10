@@ -5,6 +5,7 @@
     var config = {};
 
     config.api = {};
+    config.general = {};
     config.logging = {};
 
     // change the settings below
@@ -17,6 +18,9 @@
 
     // use "" as path to log to stdout
     config.logging.access_log_path = "access.log";
+
+    // BASE URL of your idrop.link backend instance
+    config.general.base_url = "http://localhost:7667";
 
     module.exports = config;
 })();
