@@ -416,7 +416,7 @@
 
                 doc.save(function(err, doc) {
                     if (err) {
-                        console.log(err);
+                        console.error(err);
                         return res
                             .status(500)
                             .json({
@@ -654,16 +654,11 @@
             var fileEnding = req.files.data.name.split('.').pop(),
                 fileName = req.files.data.path.split('/').pop();
 
-            console.log(fileName);
-
             var targetDir = path.join(STATIC_DATA_PATH, '/' + doc._id),
                 targetDirAbs = path.join(STATIC_DATA_PATH_ABS, '/' + doc._id),
                 targetPath = path.join(targetDir, '/' + fileName),
                 targetPathAbs = path.join(targetDirAbs, '/' + fileName),
                 tempPath = path.join(__dirname, '../../..', req.files.data.path);
-
-            console.log(targetDirAbs);
-            console.log(targetPathAbs);
 
             if (!fs.existsSync(targetDirAbs))
                 fs.mkdirSync(targetDirAbs);
@@ -737,6 +732,7 @@
             fs.unlink(path.join(__dirname, drop.path), function(err) {
                 if (err) {
                     console.error('Unable to delete file: ' + drop.path + '\n');
+                    console.error(err);
                 }
 
                 drop.remove();

@@ -59,7 +59,7 @@
     });
 
     mongoose.connection.on('error', function(err) {
-        console.log(err);
+        console.error(err);
     });
 
     mongoose.connection.on('disconnected', function() {
