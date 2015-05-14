@@ -74,6 +74,6 @@
         });
     });
 
-    app.listen(config.api.port);
+    app.listen(process.env.PORT || config.api.port);
     console.log('Listening at localhost:' + config.api.port);
 })();
