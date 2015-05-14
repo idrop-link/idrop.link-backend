@@ -20,7 +20,7 @@
     config.logging.access_log_path = "access.log";
 
     // BASE URL of your idrop.link backend instance
-    config.general.base_url = "http://localhost:7667";
+    config.general.base_url = "http://idrop.link";
 
     module.exports = config;
 })();
