@@ -1,5 +1,7 @@
 # idrop.link-backend ![strider build badge](http://ci.andinfinity.de/andinfinity/idrop.link-backend/badge?branch=master) ![david dependency badge](https://david-dm.org/andinfinity/idrop.link-backend.svg)
-idrop.link - self hosted personal screenshot and file cloud to share with your friends, colleagues and family
+idrop.link - self hosted personal screenshot and file cloud to share with your friends, colleagues and family.
+
+This app is meant to be hosted by yourself. So you stay in control of your data and security. To host the backend (the part of the app which stores and servers your drops in the internet) you need a webserver that supports at least `Nodejs` and `MongoDB`. (If you are unsure, check out [uberspace.de(uberspace).) idrop.link can also be hosted on heroku. For details check out [this guide](https://github.com/andinfinity/idrop.link-backend/wiki/Running-idrop.link-on-Heroku).
 
 ## Development
 Before touching anything, run `npm install --development` in the root directory of the project. You should have grunt have a look over your files while developing: `grunt watch`. Before commiting it is **mandatory** to run `grunt beautify`.
@@ -10,12 +12,10 @@ env $MONGODB_URI='localhost:27017/idroplink' make test
 
 The API documentation is available [here](http://andinfinity.github.io/idrop.link-backend/).
 
-### Running the app
-When everything is set up, run the app like this (you don't have to specify `$MONGODB_URI` if it runs at the standard host):
-
-```
-env $MONGODB_URI='localhost:27017/idroplink' node index
-```
-
 ## Production
 It is currently not advised to run this project in production mode.
+
+### Installation
+Please see below for a detailed installation guide depending on your setup:
+* [idrop.link a regular web server](https://github.com/andinfinity/idrop.link-backend/wiki/Running-idrop.link-on-a-web-server)
+* [idrop.link on heroku](https://github.com/andinfinity/idrop.link-backend/wiki/Running-idrop.link-on-Heroku)
