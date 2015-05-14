@@ -76,6 +76,7 @@
                     return next();
 
                 var isImage = (doc.drops[0].type == "jpg"
+                    || doc.drops[0].type == "jpeg"
                     || doc.drops[0].type == "png"
                     || doc.drops[0].type == "gif") ? true : false;
 
