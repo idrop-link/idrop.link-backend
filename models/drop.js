@@ -10,6 +10,7 @@
         shortId: {
             type: String,
             unique: true,
+            sparse: true,
             'default': shortid.generate
         },
         upload_date: {
