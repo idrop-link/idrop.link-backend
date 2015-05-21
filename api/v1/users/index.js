@@ -1,26 +1,18 @@
-(function() {
+module.exports = function(plugins) {
     'use strict';
 
     var express = require('express'),
         app = module.exports = express(),
-        passport = require('passport'),
-        path = require('path'),
-        fs = require('fs');
+		path = require('path'),
+        passport = require('passport');
 
     var config = require('../../../config');
-
-    var STATIC_DATA_PATH = path.join('/static_data'),
-        STATIC_DATA_PATH_ABS = path.join(__dirname, '../../..', STATIC_DATA_PATH),
-        TEMP_UPLOAD_PATH = path.join(__dirname, '../../..', '/uploads');
 
     var User = require(path.join(__dirname, '../../..', '/models/user')),
         Drop = require(path.join(__dirname, '../../..', '/models/drop')).Drop;
 
-    if (!fs.existsSync(STATIC_DATA_PATH_ABS))
-        fs.mkdirSync(STATIC_DATA_PATH_ABS);
-
-    if (!fs.existsSync(TEMP_UPLOAD_PATH))
-        fs.mkdirSync(TEMP_UPLOAD_PATH);
+    var STATIC_DATA_PATH = path.join('/static_data'),
+        STATIC_DATA_PATH_ABS = path.join(__dirname, '../../..', STATIC_DATA_PATH);
 
     // Reusable apidoc errors
     // CLIENT ERRORS
@@ -641,33 +633,21 @@
             }
 
             // move drop to final destination
-            var fileEnding = req.files.data.name.split('.').pop(),
-                fileName = req.files.data.path.split('/').pop();
+            var fileEnding = req.files.data.name.split('.').pop();
 
-            var targetDir = path.join(STATIC_DATA_PATH, '/' + doc._id),
-                targetDirAbs = path.join(STATIC_DATA_PATH_ABS, '/' + doc._id),
-                targetPath = path.join(targetDir, '/' + fileName),
-                targetPathAbs = path.join(targetDirAbs, '/' + fileName),
-                tempPath = path.join(__dirname, '../../..', req.files.data.path);
-
-            if (!fs.existsSync(targetDirAbs))
-                fs.mkdirSync(targetDirAbs);
-
-            // set file name
-            drop.name = req.files.data.originalname;
-            drop.path = targetPath;
-            drop.type = fileEnding;
-
-            // move file to destination
-            fs.rename(tempPath, targetPathAbs, function(err) {
-                if (err) {
-                    console.error(err);
-                    return res
-                        .status(500)
-                        .json({
-                            message: internalServerErrorMessage
-                        });
-                }
+            plugins.saveFile.save(req.files.data.path, doc._id, function(err, path) {
+				if (err) {
+					console.error(err);
+					return res
+						.status(500)
+						.json({
+							message: internalServerErrorMessage
+						});
+				}
+                // set file name
+                drop.name = req.files.data.originalname;
+                drop.path = path;
+                drop.type = fileEnding;
 
                 doc.save(function(err, doc) {
                     if (err) {
@@ -721,7 +701,7 @@
             // delete the physical file and then the mongodb document
             // NOTE: the two '..' are needed, because both, the `STATIC_DATA_PATH_ABS`
             // and the `drop.path` already contain `static_data/`
-            fs.unlink(path.join(STATIC_DATA_PATH_ABS, '..', drop.path), function(err) {
+            plugins.saveFile.remove(path.join(STATIC_DATA_PATH_ABS, '..', drop.path), function(err) {
                 if (err) {
                     console.error('Unable to delete file: ' + path.join(STATIC_DATA_PATH_ABS, '..', drop.path) + '\n');
                     console.error(err);
@@ -748,4 +728,6 @@
             });
         });
     });
-})();
+
+	return app;
+};

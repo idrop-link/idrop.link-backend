@@ -17,7 +17,17 @@
     var passport = require('passport'),
         User = require('./models/user');
 
-    var api = require('./api'),
+    // set up plugins object
+    var plugins = {};
+
+    if (config.plugins.save == 'aws') {
+        plugins.saveFile = require('./plugins/aws');
+    } else {
+        // fallback and default
+        plugins.saveFile = require('./plugins/filesystem');
+    }
+
+    var api = require('./api')(plugins),
         frontend = require('./frontend');
 
     /* set up CORS header */
@@ -28,7 +38,7 @@
     });
 
     if (config.logging.do_log) {
-        if (config.logging.access_log_path !== "") {
+        if (config.logging.access_log_path !== '') {
             var accessLogStream = fs.createWriteStream(path.join(__dirname, config.logging.access_log_path), {flags: 'a'});
             app.use(morgan('combined', {stream: accessLogStream}));
         } else {

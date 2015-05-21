@@ -1,9 +1,9 @@
-(function() {
+module.exports = function(plugins ) {
     'use strict';
 
     var express = require('express'),
         app = module.exports = express(),
-        users = require('./users');
+        users = require('./users')(plugins);
 
     /**
      * @api {get} / API entry point of first api version
@@ -40,4 +40,6 @@
     });
 
     app.use(users);
-})();
+
+	return app;
+};
