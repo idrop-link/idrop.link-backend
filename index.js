@@ -1,4 +1,6 @@
 (function() {
+	'use strict';
+
     var express = require('express'),
         mongoose = require('mongoose'),
         path = require('path'),
@@ -37,6 +39,7 @@
     app.use(bodyParser.urlencoded({
         extended: false
     }));
+
     app.use(bodyParser.json());
     app.use(multer({
         dest: './uploads/'
