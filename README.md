@@ -4,8 +4,8 @@ idrop.link - self hosted personal screenshot and file cloud to share with your f
 This app is meant to be hosted by yourself. So you stay in control of your data and security. To host the backend (the part of the app which stores and servers your drops in the internet) you need a webserver that supports at least `Nodejs` and `MongoDB`. (If you are unsure, check out [uberspace.de](http://uberspace.de).) idrop.link can also be hosted on heroku. For details check out [this guide](https://github.com/andinfinity/idrop.link-backend/wiki/Running-idrop.link-on-Heroku).
 
 idrop.link also supports several ways to store your files:
-    * plain filesystem (adviced if hosted on traditional server/webspace)
-    * Amazon Web Services S3 content delivery network (mandatory if hosted on heroku)
+* plain filesystem (adviced if hosted on traditional server/webspace)
+* Amazon Web Services S3 content delivery network (mandatory if hosted on heroku)
 
 ## Development
 Before touching anything, run `npm install --development` in the root directory of the project. You should have grunt have a look over your files while developing: `grunt watch`. Before commiting it is **mandatory** to run `grunt beautify`.
