@@ -636,8 +636,8 @@ module.exports = function(plugins) {
             var fileEnding = req.files.data.name.split('.').pop();
 
             plugins.saveFile.save(req.files.data.path, doc._id, function(err, path) {
-				if (err) {
-					console.error(err);
+				if (err || path === null) {
+					if (err) console.error(err);
 					return res
 						.status(500)
 						.json({
@@ -698,9 +698,7 @@ module.exports = function(plugins) {
                     });
             }
 
-            // delete the physical file and then the mongodb document
-            plugins.saveFile.remove(drop.path, function(err) {
-                if (err) console.error(err);
+            function removeDoc() {
                 drop.remove();
 
                 doc.save(function(err) {
@@ -719,6 +717,17 @@ module.exports = function(plugins) {
                             });
                     }
                 });
+            }
+
+            if (drop.path === undefined || drop.path === null) {
+                // the drop failed, it has no associated file
+                return removeDoc();
+            }
+
+            // delete the physical file and then the mongodb document
+            plugins.saveFile.remove(drop.path, function(err) {
+                if (err) console.error(err);
+                return removeDoc();
             });
         });
     });
