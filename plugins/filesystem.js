@@ -33,7 +33,10 @@
     }
 
     function remove(filePath, cb) {
-        fs.unlink(filePath, function(err) {
+        fs.unlink(path.join(STATIC_DATA_PATH_ABS, '..', filePath), function(err) {
+            // NOTE: the two '..' are needed, because both, the `STATIC_DATA_PATH_ABS`
+            // and the `drop.path` already contain `static_data/`
+            if (err) console.error('Unable to delete file: ' + path.join(STATIC_DATA_PATH_ABS, '..', drop.path) + '\n');
             cb(err);
         });
     }

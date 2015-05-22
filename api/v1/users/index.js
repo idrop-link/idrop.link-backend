@@ -699,14 +699,8 @@ module.exports = function(plugins) {
             }
 
             // delete the physical file and then the mongodb document
-            // NOTE: the two '..' are needed, because both, the `STATIC_DATA_PATH_ABS`
-            // and the `drop.path` already contain `static_data/`
-            plugins.saveFile.remove(path.join(STATIC_DATA_PATH_ABS, '..', drop.path), function(err) {
-                if (err) {
-                    console.error('Unable to delete file: ' + path.join(STATIC_DATA_PATH_ABS, '..', drop.path) + '\n');
-                    console.error(err);
-                }
-
+            plugins.saveFile.remove(drop.path, function(err) {
+                if (err) console.error(err);
                 drop.remove();
 
                 doc.save(function(err) {
