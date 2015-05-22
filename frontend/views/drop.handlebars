@@ -6,13 +6,18 @@
 
 <div class="drop-wrap">
     <div class="drop">
-        {{#if is_image}}
-            <img class="drop-img" alt="broken" src="{{path}}">
+        {{#if path}}
+            {{#if is_image}}
+                <img class="drop-img" alt="broken" src="{{path}}">
             {{else}}
-            <a href="{{path}}" title="Download {{title}}">
-                <button>Download</button>
-            </a>
+                <a href="{{path}}" title="Download {{title}}">
+                    <button>Download</button>
+                </a>
+            {{/if}}
+           <div class="drop-title">{{title}}</div>
+        {{else}}
+            <img class="loader" alt="loader" src="/public/img/loader.gif">
+            <p>The drop is being uploaded.</p>
         {{/if}}
-        <div class="drop-title">{{title}}</title>
     </div>
 </div>
