@@ -27,5 +27,10 @@
             // prevent sending of the form
             return false;
         });
+
+        $('.drop-img').on('click', function(e) {
+            var $target = $(e.target);
+            $target.toggleClass('upsized');
+        });
     });
 })();

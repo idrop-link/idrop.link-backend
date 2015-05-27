@@ -197,8 +197,21 @@ body.drop nav h1 {
 button.button {
     background-color: #555 !important; }
 
-.drop-wrap img {
+.drop-img {
+    height: auto;
     display: inline-block; }
+
+.drop-img:not(.upsized) {
+    cursor: -webkit-zoom-in;
+    cursor: -moz-zoom-in;
+    cursor: zoom-in;
+    max-width: 90%; }
+
+.drop-img.upsized {
+    cursor: -webkit-zoom-out;
+    cursor: -moz-zoom-out;
+    cursor: zoom-out;
+    max-width: inherit; }
 
 .drop-wrap .drop-title {
     text-shadow: none;
