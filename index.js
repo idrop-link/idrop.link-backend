@@ -20,7 +20,7 @@
     // set up plugins object
     var plugins = {};
 
-    if (config.plugins.save == 'aws') {
+    if (config.plugins.save == 'aws' || process.env.ENFORCE_AWS == 'true') {
         plugins.saveFile = require('./plugins/aws');
     } else {
         // fallback and default
