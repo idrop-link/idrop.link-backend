@@ -473,6 +473,10 @@ module.exports = function(plugins) {
      * @apiSuccess (200) _id the drop id
      * @apiSuccess (200) name the original file name
      * @apiSuccess (200) url the file url
+     * @apiSuccess (200) upload_date date of upload, like "2015-05-22T18:35:11.902Z"
+     * @apiSuccess (200) path the (relative) path or url to the file
+     * @apiSuccess (200) type file type, like "jpg"
+     * @apiSuccess (200) shortId the short id for URL building
      *
      * @apiUse TokenError
      * @apiUse UnauthorizedError
