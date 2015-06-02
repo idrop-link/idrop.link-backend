@@ -477,6 +477,7 @@ module.exports = function(plugins) {
      * @apiSuccess (200) path the (relative) path or url to the file
      * @apiSuccess (200) type file type, like "jpg"
      * @apiSuccess (200) shortId the short id for URL building
+     * @apiSuccess (200) views count of views
      *
      * @apiUse TokenError
      * @apiUse UnauthorizedError
