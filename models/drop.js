@@ -11,7 +11,7 @@
             type: String,
             unique: true,
             sparse: true,
-            'default': shortid.generate
+            default: shortid.generate
         },
         upload_date: {
             type: Date,
@@ -20,7 +20,11 @@
         name: String,
         path: String,
         url: String,
-        type: String
+        type: String,
+        views: {
+            type: Number,
+            default: 0
+        }
     });
 
     var Drop = mongoose.model('Drop', DropSchema);

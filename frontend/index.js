@@ -75,16 +75,24 @@
                 if (!doc)
                     return next();
 
-                var isImage = (doc.drops[0].type == "jpg"
-                    || doc.drops[0].type == "jpeg"
-                    || doc.drops[0].type == "png"
-                    || doc.drops[0].type == "gif") ? true : false;
+                doc.views = doc.views ? doc.views + 1 : 1;
 
-                res.render('drop', {
-                    path: doc.drops[0].path,
-                    is_image: isImage,
-                    site: 'drop',
-                    title: doc.drops[0].name
+                doc.save(function(err, _doc) {
+                    if (err) {
+                        console.err('doc cannot be saved: ' + doc._id);
+                    }
+
+                    var isImage = (doc.drops[0].type == "jpg"
+                        || doc.drops[0].type == "jpeg"
+                        || doc.drops[0].type == "png"
+                        || doc.drops[0].type == "gif") ? true : false;
+
+                    res.render('drop', {
+                        path: doc.drops[0].path,
+                        is_image: isImage,
+                        site: 'drop',
+                        title: doc.drops[0].name
+                    });
                 });
             });
     });
