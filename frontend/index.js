@@ -82,10 +82,13 @@
                         console.err('doc cannot be saved: ' + doc._id);
                     }
 
-                    var isImage = (doc.drops[0].type == "jpg"
-                        || doc.drops[0].type == "jpeg"
-                        || doc.drops[0].type == "png"
-                        || doc.drops[0].type == "gif") ? true : false;
+                    var _type = doc.drops[0].toLowerCase();
+
+                    var isImage = (_type == "jpg"
+                        || _type == "jpeg"
+                        || _type == "png"
+                        || _type == "svg"
+                        || _type == "gif") ? true : false;
 
                     res.render('drop', {
                         path: doc.drops[0].path,
