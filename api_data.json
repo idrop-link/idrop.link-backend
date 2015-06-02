@@ -176,6 +176,36 @@
             "optional": false,
             "field": "url",
             "description": "<p>the file url</p> "
+          },
+          {
+            "group": "200",
+            "optional": false,
+            "field": "upload_date",
+            "description": "<p>date of upload, like &quot;2015-05-22T18:35:11.902Z&quot;</p> "
+          },
+          {
+            "group": "200",
+            "optional": false,
+            "field": "path",
+            "description": "<p>the (relative) path or url to the file</p> "
+          },
+          {
+            "group": "200",
+            "optional": false,
+            "field": "type",
+            "description": "<p>file type, like &quot;jpg&quot;</p> "
+          },
+          {
+            "group": "200",
+            "optional": false,
+            "field": "shortId",
+            "description": "<p>the short id for URL building</p> "
+          },
+          {
+            "group": "200",
+            "optional": false,
+            "field": "views",
+            "description": "<p>count of views</p> "
           }
         ]
       }
@@ -385,6 +415,12 @@
             "optional": false,
             "field": "shortId",
             "description": "<p>the short id for URL building</p> "
+          },
+          {
+            "group": "200",
+            "optional": false,
+            "field": "views",
+            "description": "<p>count of views</p> "
           }
         ]
       }
