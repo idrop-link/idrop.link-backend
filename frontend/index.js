@@ -82,7 +82,7 @@
                         console.err('doc cannot be saved: ' + doc._id);
                     }
 
-                    var _type = doc.drops[0].toLowerCase();
+                    var _type = doc.drops[0].type.toLowerCase();
 
                     var isImage = (_type == "jpg"
                         || _type == "jpeg"
