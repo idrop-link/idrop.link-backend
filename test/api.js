@@ -90,10 +90,10 @@
             });
         });
 
-        describe('GET /users/:email/idformail', function() {
+        describe('POST /users/:email/idformail', function() {
             it('should return id', function(done) {
                 request(app)
-                    .get('/api/v1/users/' + testUser.email + '/idformail')
+                    .post('/api/v1/users/' + testUser.email + '/idformail')
                     .expect(200)
                     .send(testUser)
                     .end(function(err, res) {

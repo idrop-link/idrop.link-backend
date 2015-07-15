@@ -281,7 +281,7 @@ module.exports = function(plugins) {
     });
 
     /**
-     * @api {get} /users/:email/idformail Get User ID by email
+     * @api {post} /users/:email/idformail Get User ID by email
      *
      * @apiName GetUserMailByID
      * @apiGroup User
@@ -295,7 +295,7 @@ module.exports = function(plugins) {
      * @apiUse BadRequestError
      * @apiUse InternalServerError
      */
-    app.get('/api/v1/users/:email/idformail', passport.authenticate('local', {
+    app.post('/api/v1/users/:email/idformail', passport.authenticate('local', {
         session: false
     }), function(req, res) {
         if (req.user) {
