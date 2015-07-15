@@ -130,8 +130,8 @@ module.exports = function(plugins) {
      *
      * @apiParam {String} email unique email address
      * @apiParam {String} password the users password
-	 *
-	 * @apiError (400) Email already in use
+     *
+     * @apiError (400) Email already in use
      *
      * @apiUse BadRequestError
      * @apiUse InternalServerError
