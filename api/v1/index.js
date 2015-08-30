@@ -1,4 +1,4 @@
-module.exports = function(plugins ) {
+module.exports = function(plugins) {
     'use strict';
 
     var express = require('express'),
@@ -41,5 +41,5 @@ module.exports = function(plugins ) {
 
     app.use(users);
 
-	return app;
+    return app;
 };

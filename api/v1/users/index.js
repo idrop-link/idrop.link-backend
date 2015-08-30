@@ -3,7 +3,7 @@ module.exports = function(plugins) {
 
     var express = require('express'),
         app = module.exports = express(),
-		path = require('path'),
+        path = require('path'),
         passport = require('passport');
 
     var config = require('../../../config');
@@ -112,13 +112,13 @@ module.exports = function(plugins) {
     }
 
     // User
-	app.get('/api/v1/users', function(req, res) {
-		return res
-			.status(404)
-			.json({
-				message: 'Not implemented.'
-			});
-	});
+    app.get('/api/v1/users', function(req, res) {
+        return res
+            .status(404)
+            .json({
+                message: 'Not implemented.'
+            });
+    });
 
     /**
      * @api {post} /users Create User
@@ -646,14 +646,14 @@ module.exports = function(plugins) {
             var fileEnding = req.files.data.name.split('.').pop();
 
             plugins.saveFile.save(req.files.data.path, doc._id, function(err, path) {
-				if (err || path === null) {
-					if (err) console.error(err);
-					return res
-						.status(500)
-						.json({
-							message: internalServerErrorMessage
-						});
-				}
+                if (err || path === null) {
+                    if (err) console.error(err);
+                    return res
+                        .status(500)
+                        .json({
+                            message: internalServerErrorMessage
+                        });
+                }
                 // set file name
                 drop.name = req.files.data.originalname;
                 drop.path = path;
@@ -742,5 +742,5 @@ module.exports = function(plugins) {
         });
     });
 
-	return app;
+    return app;
 };

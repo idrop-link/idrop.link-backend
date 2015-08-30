@@ -42,5 +42,5 @@ module.exports = function(plugins) {
     /* use first API version */
     app.use(v1);
 
-	return app;
+    return app;
 };
