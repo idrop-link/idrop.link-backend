@@ -5,11 +5,36 @@
         exphbs = require('express-handlebars'),
         path = require('path');
 
-    var app = module.exports = express();
+    var app = module.exports = express(),
+		session = require('express-session'),
+        cookieParser = require('cookie-parser');
+
+    var passport = require('passport');
+
+    var config = require('../config');
+
+    var MongoStore = require('connect-mongo')(session);
 
     var User = require('../models/user');
 
-        /* Handlebars Layouts */
+    var database = process.env.MONGODB_URI || 'mongodb://localhost:27017/idroplink';
+
+    var sessionOpts = {
+        saveUninitialized: true, // saved new sessions
+        resave: false, // do not automatically write to the session store
+        store: new MongoStore({
+            url: database
+        }),
+        secret: config.secrets.sessions,
+        cookie : { httpOnly: true, maxAge: 2419200000 } // configure when sessions expires
+    };
+
+
+    // set up sessions
+    app.use(cookieParser(config.secrets.sessions));
+    app.use(session(sessionOpts));
+
+    /* Handlebars Layouts */
     var hbs = exphbs.create({
         defaultLayout: 'main',
         layoutsDir: __dirname + '/views/layouts',
@@ -41,15 +66,69 @@
     app.get('/', function(req, res, next) {
         res.render('launch', {
             title: 'idrop.link - coming soon',
-            site: 'launch'
+            site: 'launch',
+            userId: req.session.userId
         });
     });
 
     app.get('/signup', function(req, res, next) {
         res.render('signup', {
-            title: 'idrop.link - signup',
-            site: 'signup'
+            title: 'idrop.link - sig nup',
+            site: 'signup',
+            userId: req.session.userId
         });
+    });
+
+    app.get('/signin', function(req, res, next) {
+        if (!req.session.userId) {
+            res.render('signin', {
+                title: 'idrop.link - sign in',
+                site: 'signin'
+            });
+        } else {
+            res.redirect('/u/' + req.session.userId);
+        }
+    });
+
+    app.post('/signin',
+        passport.authenticate('local', {
+            session: false
+        }), function(req, res, next) {
+            User.findOne({
+                email: req.body.email
+            }, function(err, doc) {
+                if (err) {
+                    return res
+                        .status(500)
+                        .json({
+                            message: 'Something bad happened. We are sorry. Please try again later.'
+                        });
+                }
+
+                if (!doc) {
+                    return res
+                        .status(404)
+                        .json({
+                            message: 'No such user with this mail.'
+                        });
+                }
+
+                req.session.userId = doc._id;
+                console.log(doc._id);
+
+                return res
+                    .status(200)
+                    .json({
+                        _id: doc._id
+                    });
+            });
+    });
+
+    app.get('/signout', function(req, res, next) {
+        req.logout();
+        req.session.userId = null;
+
+        res.redirect('/');
     });
 
     app.get('/welcome', function(req, res, next) {
@@ -62,13 +141,18 @@
         res.render('welcome', {
             toast: toast,
             title: 'idrop.link - Welcome aboard!',
-            site: 'welcome'
+            site: 'welcome',
+            userId: req.session.userId
         });
     });
 
     app.get('/d/:shortId', function(req, res, next) {
-        User.findOne({'drops.shortId': req.params.shortId},
-            {'drops.$': 1}, function(err, doc) {
+        User.findOne({
+                'drops.shortId': req.params.shortId
+            },
+            {
+                'drops.$': 1
+            }, function(err, doc) {
                 if (err)
                     return next(err);
 
@@ -94,10 +178,36 @@
                         path: doc.drops[0].path,
                         is_image: isImage,
                         site: 'drop',
-                        title: doc.drops[0].name
+                        title: doc.drops[0].name,
+                        userId: req.session.userId
                     });
                 });
             });
+    });
+
+    app.get('/u/', function(req, res, next) {
+        res.redirect('/');
+    });
+
+    app.get('/u/:userId', function(req, res, next) {
+        if (!req.session.userId || (req.session.userId != req.params.userId)) {
+            res.redirect('/');
+        }
+
+        User.findById(req.params.userId, function(err, doc) {
+            if (err)
+                return next(err);
+
+            if (!doc)
+                return next();
+
+            res.render('drops', {
+                    drops: doc.drops,
+                    site: 'drops',
+                    title: doc.email + ' drops.',
+                    userId: req.session.userId
+                });
+        });
     });
 
     // error handling

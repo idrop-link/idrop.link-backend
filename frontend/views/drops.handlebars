@@ -1,0 +1,19 @@
+{{>navbar}}
+
+<div class="centered">
+    {{#if drops}}
+    <div class="drop-list">
+        <ul>
+        {{#each drops}}
+            <li>
+                <a href="/d/{{this.shortId}}" title="{{this.name}}">
+                    {{this.name}}
+                </a>
+            </li>
+        {{/each}}
+        </ul>
+    </div>
+    {{else}}
+    <p>Nothing to see here.</p>
+    {{/if}}
+</div>

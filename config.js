@@ -8,6 +8,7 @@
     config.general = {};
     config.logging = {};
     config.plugins = {};
+    config.secrets = {};
 
     // change the settings below
 
@@ -25,6 +26,9 @@
 
     // file saving plugin config
     config.plugins.save = 'filesystem'; // default: "filesystem"
+
+    // session secret. CHANGE THIS!
+    config.secrets.sessions = 'OITNT5246#MAS_@igjr39';
 
     module.exports = config;
 })();

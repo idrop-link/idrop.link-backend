@@ -1,5 +1,5 @@
 (function() {
-	'use strict';
+    'use strict';
 
     var express = require('express'),
         mongoose = require('mongoose'),
@@ -40,11 +40,12 @@
     if (config.logging.do_log) {
         if (config.logging.access_log_path !== '') {
             var accessLogStream = fs.createWriteStream(path.join(__dirname,
-                    config.logging.access_log_path),
-                    {
-                        flags: 'a'
-                    });
-            app.use(morgan('combined', {stream: accessLogStream}));
+                config.logging.access_log_path), {
+                flags: 'a'
+            });
+            app.use(morgan('combined', {
+                stream: accessLogStream
+            }));
         } else {
             app.use(morgan('combined'));
         }
@@ -61,6 +62,9 @@
 
     /* set up passport strategy */
     passport.use(User.createStrategy());
+
+	app.use(passport.initialize());
+	app.use(passport.session());
 
     app.use(api);
     app.use(frontend);

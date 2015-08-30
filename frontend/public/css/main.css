@@ -22,7 +22,9 @@ body.launch,
 body.drop,
 body.error,
 body.signup,
-body.welcome {
+body.signin,
+body.welcome,
+body.drops {
     background-image: url('/public/img/background.jpg');
     background-size: cover;
     background-repeat: no-repeat;
@@ -162,7 +164,8 @@ body.drop nav h1 {
     text-align: center; }
 
 .drop-wrap .drop,
-.form-wrap .form {
+.form-wrap .form,
+.drop-list {
     -webkit-box-shadow: 0px 5px 5px 0px rgba(50, 50, 50, 0.75);
     -moz-box-shadow:    0px 5px 5px 0px rgba(50, 50, 50, 0.75);
     box-shadow:         0px 5px 5px 0px rgba(50, 50, 50, 0.75);

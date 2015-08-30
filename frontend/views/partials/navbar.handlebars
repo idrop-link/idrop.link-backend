@@ -8,6 +8,19 @@
                 <li>
                     <a href="/doc">Documentation</a>
                 </li>
+                {{#if userId}}
+                <li class="highlighted">
+                    <a href="/u/{{ userId }}">Profile</a>
+                </li>
+
+                <li class="highlighted">
+                    <a href="/signout">Log out</a>
+                </li>
+                {{else}}
+                <li class="highlighted">
+                    <a href="/signin">Sign in</a>
+                </li>
+                {{/if}}
                 <!--
                 <li class="highlighted">
                     <a href="/welcome">Download</a>
