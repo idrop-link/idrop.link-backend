@@ -100,7 +100,7 @@
     };
 
     UserSchema.methods.invalidateToken = function(token) {
-        if (this.constructor.validateToken(token)) {
+        if (this.validateToken(token)) {
             for (var i = 0; i < this.tokens.length; i++) {
                 if (this.tokens[i].token == token) {
                     this.tokens[i].invalidate();
