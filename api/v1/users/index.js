@@ -346,7 +346,7 @@ module.exports = function(plugins) {
      * @apiError (401) message unauthorized
      * @apiError (400) message bad request
      *
-     * @apiSuccess (200) token the requested token
+     * @apiSuccess (201) token the requested token
      *
      * @apiParam {String} email unique email address
      * @apiParam {String} password the users password
