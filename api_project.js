@@ -1,13 +1,1 @@
-define({
-  "name": "idrop.link-backend",
-  "version": "0.0.0",
-  "description": " API for the idrop.link project",
-  "sampleUrl": false,
-  "apidoc": "0.2.0",
-  "generator": {
-    "name": "apidoc",
-    "time": "2015-06-02T20:31:04.354Z",
-    "url": "http://apidocjs.com",
-    "version": "0.12.1"
-  }
-});
+define({  "name": "",  "version": "0.0.0",  "description": "",  "sampleUrl": false,  "apidoc": "0.2.0",  "generator": {    "name": "apidoc",    "time": "2016-03-04T07:42:22.382Z",    "url": "http://apidocjs.com",    "version": "0.15.1"  }});
