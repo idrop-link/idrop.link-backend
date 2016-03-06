@@ -1,4 +1,4 @@
-# idrop.link-backend ![strider build badge](http://ci.andinfinity.de/andinfinity/idrop.link-backend/badge?branch=master) ![david dependency badge](https://david-dm.org/andinfinity/idrop.link-backend.svg)
+# idrop.link-backend ![strider build badge](http://ci.andinfinity.de/andinfinity/idrop.link-backend/badge?branch=master) ![david dependency badge](https://david-dm.org/andinfinity/idrop.link-backend.svg) [![Codacy Badge](https://api.codacy.com/project/badge/grade/d7996b1980ec4c59abecd5d4f767aa94)](https://www.codacy.com/app/christian-schulze/idrop-link-backend)
 idrop.link - self hosted personal screenshot and file cloud to share with your friends, colleagues and family.
 
 This app is meant to be hosted by yourself. So you stay in control of your data and security. To host the backend (the part of the app which stores and servers your drops in the internet) you need a webserver that supports at least `Nodejs` and `MongoDB`. (If you are unsure, check out [uberspace.de](http://uberspace.de).) idrop.link can also be hosted on heroku. For details check out [this guide](https://github.com/andinfinity/idrop.link-backend/wiki/Running-idrop.link-on-Heroku).
