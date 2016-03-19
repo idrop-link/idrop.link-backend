@@ -552,7 +552,6 @@ module.exports = function(plugins) {
      * @apiParam {String} Token The authorization token
      *
      * @apiSuccess (200) _id the drop id
-     * @apiSuccess (200) name the original file name
      * @apiSuccess (200) url the file url
      *
      * @apiUse TokenError
@@ -581,8 +580,7 @@ module.exports = function(plugins) {
                         .status(201)
                         .json({
                             _id: drop._id,
-                            url: drop.url,
-                            name: drop.name
+                            url: drop.url
                         });
                 }
             });
