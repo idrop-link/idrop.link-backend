@@ -220,7 +220,8 @@
                 site: 'error',
                 title: "404 - Not found",
                 error: "Not found: '" + req.url + "'.",
-                error_num: 404
+                error_num: 404,
+                userId: req.session.userId
             });
             return;
         }
@@ -236,7 +237,8 @@
         res.status(err.status || 500);
         res.render('error', {
             error: err,
-            error_num: 500
+            error_num: 500,
+            userId: req.session.userId
         });
     });
 })();
