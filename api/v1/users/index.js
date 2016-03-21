@@ -286,7 +286,7 @@ module.exports = function(plugins) {
      * @apiName GetUserMailByID
      * @apiGroup User
      *
-     * @apiSuccess (201) {String} _id the users id
+     * @apiSuccess (200) {String} _id the users id
      *
      * @apiParam {String} email unique email address
      * @apiParam {String} password the users password
@@ -598,7 +598,7 @@ module.exports = function(plugins) {
      * @apiParam {String} Token The authorization token
      * @apiParam {File} data the file to be uploaded
      *
-     * @apiSuccess (200) message success
+     * @apiSuccess (201) message success
      *
      * @apiError (400) Uninitialized drop
      * @apiError (409) Conflict: Drop already uploaded
@@ -668,7 +668,7 @@ module.exports = function(plugins) {
                     }
 
                     return res
-                        .status(200)
+                        .status(201)
                         .json({
                             message: 'success'
                         });
