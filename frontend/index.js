@@ -114,7 +114,6 @@
                 }
 
                 req.session.userId = doc._id;
-                console.log(doc._id);
 
                 return res
                     .status(200)
@@ -191,7 +190,7 @@
 
     app.get('/u/:userId', function(req, res, next) {
         if (!req.session.userId || (req.session.userId != req.params.userId)) {
-            res.redirect('/');
+            return res.redirect('/');
         }
 
         User.findById(req.params.userId, function(err, doc) {
@@ -238,7 +237,7 @@
         res.render('error', {
             error: err,
             error_num: 500,
-            userId: req.session.userId
+            userId: req.session.userId ? req.session : None
         });
     });
 })();
