@@ -24,6 +24,22 @@
     // BASE URL of your idrop.link backend instance
     config.general.base_url = 'http://idrop.link';
 
+    // upload permitted or not? (all users)
+    config.general.upload_permitted = true;
+
+    // < 0 means unlimited (all users) / in megabyte
+    config.general.upload_quota = -1;
+
+    // all users
+    config.general.signup_permitted = true;
+
+    // all users / signup has to be permitted
+    // "" means there is none
+    config.general.signup_keyword = "";
+
+    // all users
+    config.general.login_permitted = true;
+
     // file saving plugin config
     config.plugins.save = 'filesystem'; // default: "filesystem"
 

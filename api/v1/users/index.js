@@ -131,7 +131,8 @@ module.exports = function(plugins) {
      * @apiParam {String} email unique email address
      * @apiParam {String} password the users password
      *
-     * @apiError (400) Email already in use
+     * @apiError (400) message Email already in use
+     * @apiError (503) message Signup not permitted at the moment
      *
      * @apiUse BadRequestError
      * @apiUse InternalServerError
@@ -142,6 +143,14 @@ module.exports = function(plugins) {
                 .status(400)
                 .json({
                     message: badRequestMessage
+                });
+        }
+
+        if (!config.signup_permitted) {
+            return res
+                .status(503)
+                .json({
+                    message: "Signing up is not permitted at the moment"
                 });
         }
 
@@ -341,6 +350,7 @@ module.exports = function(plugins) {
      * @apiName CreateUserToken
      * @apiGroup User
      *
+     * @apiError (503) message login not permitted at the moment
      * @apiError (500) message error while generating token
      * @apiError (404) message no such user
      * @apiError (401) message unauthorized
@@ -360,6 +370,14 @@ module.exports = function(plugins) {
         session: false
     }), function(req, res) {
         if (req.user) {
+            if (!config.login_permitted) {
+                return res
+                    .status(503)
+                    .json({
+                        message: "Login up is not permitted at the moment"
+                    });
+            }
+
             User.findById(req.params.userId, function(err, doc) {
                 if (err) {
                     console.error(err);
@@ -554,6 +572,9 @@ module.exports = function(plugins) {
      * @apiSuccess (200) _id the drop id
      * @apiSuccess (200) url the file url
      *
+     * @apiError (503) message uploading not permitted at the moment or user exceeded upload
+     * quota
+     *
      * @apiUse TokenError
      * @apiUse UnauthorizedError
      * @apiUse InternalServerError
@@ -563,6 +584,15 @@ module.exports = function(plugins) {
     app.post('/api/v1/users/:userId/drops', function(req, res) {
         executeOnAuthenticatedRequest(req, res, function(doc) {
             var drop = doc.drops.create({});
+
+            if (!config.upload_permitted) {
+                return res
+                    .status(503)
+                    .json({
+                        message: "Uploading not permitted at the moment"
+                    });
+            }
+
             doc.drops.push(drop);
 
             drop.url = config.general.base_url + '/d/' + drop.shortId;
